@@ -1,0 +1,50 @@
+{
+  "method": "empirical horizon-specific prediction error band",
+  "calibration_period": [
+    2015,
+    2020
+  ],
+  "evaluation_period": [
+    2021,
+    2024
+  ],
+  "quantile": 0.9,
+  "model_selection": {
+    "1": "Ridge",
+    "2": "RandomForest",
+    "3": "RandomForest",
+    "4": "RandomForest",
+    "5": "RandomForest",
+    "6": "GradientBoosting",
+    "7": "RandomForest"
+  },
+  "horizon_q90_kg_ha": {
+    "1": 276.3,
+    "2": 262.05,
+    "3": 270.35,
+    "4": 280.12,
+    "5": 278.85,
+    "6": 345.27,
+    "7": 295.62
+  },
+  "overall_evaluation_coverage_pct": 94.39,
+  "horizon_evaluation_coverage_pct": {
+    "1": 96.43,
+    "2": 92.86,
+    "3": 92.86,
+    "4": 89.29,
+    "5": 96.43,
+    "6": 96.43,
+    "7": 96.43
+  },
+  "district_evaluation_coverage_pct": {
+    "Akola": 100.0,
+    "Amravati": 96.43,
+    "Buldhana": 100.0,
+    "Nagpur": 100.0,
+    "Wardha": 100.0,
+    "Washim": 89.29,
+    "Yavatmal": 75.0
+  },
+  "note": "Historical out-of-sample empirical error bands using the same horizon-specific model selection as the saved future forecasting models; not a guarantee of future 90% coverage."
+}

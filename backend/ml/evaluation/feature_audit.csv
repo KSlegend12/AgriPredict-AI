@@ -1,0 +1,44 @@
+feature,type,used_by_model,possible_leakage,missing_values,reason
+district,E. Metadata/text features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+year,E. Metadata/text features,False,NO,0 (0.0%),"Used for temporal splitting, not as predictive feature"
+cotton_area_000ha,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+yield_target_kg_ha,A. Target,False,YES if used in training inputs,0 (0.0%),Target variable to be predicted
+target_source_detail,E. Metadata/text features,False,NO,0 (0.0%),Dataset source metadata column
+target_review_flag,E. Metadata/text features,False,NO,0 (0.0%),Dataset source metadata column
+tmax_annual_mean_c,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+tmax_monsoon_mean_c,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+tmax_kharif_mean_c,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+tmax_max_c,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+tmax_hot_days_ge35_kharif,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+tmin_annual_mean_c,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+tmin_monsoon_mean_c,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+tmin_kharif_mean_c,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+tmin_min_c,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+rainfall_annual_mm,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+rainy_days_annual,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+heavy_rain_days_annual,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+rainfall_max_1day_annual_mm,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+max_5day_rain_annual_mm,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+max_dry_spell_annual_days,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+rainfall_monsoon_mm,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+rainy_days_monsoon,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+heavy_rain_days_monsoon,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+rainfall_max_1day_monsoon_mm,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+max_5day_rain_monsoon_mm,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+max_dry_spell_monsoon_days,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+rainfall_kharif_mm,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+rainy_days_kharif,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+heavy_rain_days_kharif,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+rainfall_max_1day_kharif_mm,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+max_5day_rain_kharif_mm,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+max_dry_spell_kharif_days,C. Weather features,True,NO,0 (0.0%),Seasonal crop growth weather / area input
+previous_year_yield_kg_ha,B. Historical yield features,True,"NO (if lag from prior year t-1, t-2, rolling 3-yr)",7 (3.61%),Prior year recorded yields
+previous_2year_yield_kg_ha,B. Historical yield features,True,"NO (if lag from prior year t-1, t-2, rolling 3-yr)",14 (7.22%),Prior year recorded yields
+rolling_3yr_yield_mean_kg_ha,B. Historical yield features,True,"NO (if lag from prior year t-1, t-2, rolling 3-yr)",7 (3.61%),Prior year recorded yields
+rainfall_monsoon_mm_district_anomaly,D. Weather anomaly features,True,NO,7 (3.61%),Seasonal climate difference from district mean
+rainfall_kharif_mm_district_anomaly,D. Weather anomaly features,True,NO,7 (3.61%),Seasonal climate difference from district mean
+tmax_kharif_mean_c_district_anomaly,D. Weather anomaly features,True,NO,7 (3.61%),Seasonal climate difference from district mean
+tmin_kharif_mean_c_district_anomaly,D. Weather anomaly features,True,NO,7 (3.61%),Seasonal climate difference from district mean
+weather_temp_extraction,E. Metadata/text features,False,NO,0 (0.0%),Dataset source metadata column
+weather_rain_extraction,E. Metadata/text features,False,NO,0 (0.0%),Dataset source metadata column
+target_note,E. Metadata/text features,False,NO,0 (0.0%),Dataset source metadata column

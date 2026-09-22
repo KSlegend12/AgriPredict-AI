@@ -1,0 +1,8 @@
+district,year,actual_kg_ha,predicted_kg_ha,absolute_error_kg_ha,percentage_error,quality_classification
+Akola,2024,261.5,393.4,131.9,50.45,Above 20% error
+Amravati,2024,572.0,393.9,178.1,31.13,Above 20% error
+Buldhana,2024,280.8,430.3,149.5,53.23,Above 20% error
+Nagpur,2024,390.4,438.8,48.4,12.41,Within 20% error
+Wardha,2024,462.4,354.8,107.6,23.27,Above 20% error
+Washim,2024,550.2,408.3,142.0,25.8,Above 20% error
+Yavatmal,2024,1063.0,296.0,767.0,72.16,Above 20% error

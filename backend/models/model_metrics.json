@@ -1,0 +1,57 @@
+{
+  "classifier": {
+    "model_type": "VotingClassifier (RF + XGB + HistGB)",
+    "accuracy": 0.9695,
+    "feature_importances": {
+      "district_encoded": 0.012938235013455033,
+      "season_encoded": 0.05747648435650394,
+      "temperature": 0.10005035998610151,
+      "rainfall": 0.16565960978098876,
+      "humidity": 0.03475234623177463,
+      "wind_speed": 0.009303355042707904,
+      "soil_ph": 0.11011989170384998,
+      "nitrogen": 0.024644525538798145,
+      "phosphorus": 0.013651186559457521,
+      "potassium": 0.015262290493398346,
+      "soil_moisture": 0.010225607630240505,
+      "irrigation": 0.010393350109913964,
+      "fertilizer_usage": 0.010149458702633367,
+      "water_index": 0.26891021581883884,
+      "npk_sum": 0.028705868780667387,
+      "temp_rain_ratio": 0.1277572142506702
+    }
+  },
+  "regressor": {
+    "model_type": "VotingRegressor (XGB + RF + ExtraTrees)",
+    "mae": 1.1718583584659819,
+    "rmse": 1.6795176187307899,
+    "r2_score": 0.9931450848898159,
+    "feature_importances": {
+      "crop_encoded": 0.4058641791343689,
+      "district_encoded": 9.66123552643694e-05,
+      "season_encoded": 6.279716035351157e-05,
+      "temperature": 0.005740683060139418,
+      "rainfall": 0.000599358172621578,
+      "humidity": 0.00016993973986245692,
+      "wind_speed": 0.0001812776899896562,
+      "soil_ph": 0.004679678473621607,
+      "nitrogen": 0.0005347046535462141,
+      "phosphorus": 0.0002765285025816411,
+      "potassium": 0.0002732026332523674,
+      "soil_moisture": 0.0001857286406448111,
+      "irrigation": 0.00021861512504983693,
+      "fertilizer_usage": 0.0030114767141640186,
+      "cultivated_area": 0.00019428868836257607,
+      "water_index": 0.5415734052658081,
+      "npk_sum": 0.001861911965534091,
+      "temp_rain_ratio": 0.034475624561309814
+    }
+  },
+  "crops": [
+    "Onion",
+    "Sugarcane",
+    "Tomato"
+  ],
+  "districts_count": 36,
+  "samples_trained": 10000
+}

@@ -1,0 +1,66 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Node / frontend
+node_modules/
+frontend/dist/
+
+# Build / cache
+.cache/
+.vite/
+*.log
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Python model/cache artifacts
+*.joblib.tmp
+
+# Temporary Antigravity/debug extraction scripts
+/check_step0.py
+/extract_all.py
+/extract_chunk.py
+/extract_data.py
+/find_akola.py
+/find_boundaries.py
+/find_csv_step.py
+/find_exact_user_input.py
+/inspect_line61.py
+/inspect_step0.py
+/print_sample.py
+/print_tail.py
+/frontend.zip
+
+# Raw satellite downloads (large source files)
+data/satellite/**/*.nc
+
+
+# Local runtime database
+backend/database/*.db
+
+
+# Local backup files
+*.backup
+

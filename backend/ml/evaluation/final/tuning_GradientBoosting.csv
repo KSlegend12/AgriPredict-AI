@@ -1,0 +1,5 @@
+params,Mean_MAE
+"{'n_estimators': 100, 'learning_rate': 0.05, 'max_depth': 3}",106.1784
+"{'n_estimators': 200, 'learning_rate': 0.05, 'max_depth': 3}",107.6431
+"{'n_estimators': 200, 'learning_rate': 0.03, 'max_depth': 3}",107.9811
+"{'n_estimators': 150, 'learning_rate': 0.05, 'max_depth': 4}",112.4482

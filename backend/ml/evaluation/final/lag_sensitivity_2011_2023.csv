@@ -1,0 +1,5 @@
+Config,Mean_MAE,Mean_RMSE,Mean_R2,Mean_MAPE
+All_Features,106.18,126.65,-1.5769,38.16
+Weather+Area_Only,118.11,142.57,-2.0113,34.68
+Lag+District_Only,124.43,151.36,-3.5464,44.56
+Weather+Lag,107.38,127.31,-1.6219,38.56

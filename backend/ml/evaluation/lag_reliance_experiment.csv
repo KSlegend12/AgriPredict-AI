@@ -1,0 +1,4 @@
+Configuration,MAE,RMSE,R2,MAPE
+Config A: All Features (36),115.06,160.62,0.1398,39.04
+Config B: Weather & Area Only (No Lags),133.87,196.09,-0.282,37.58
+Config C: Lag Features Only + District,123.26,171.9,0.0147,41.81

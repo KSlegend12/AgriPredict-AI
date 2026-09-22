@@ -1,0 +1,62 @@
+{
+  "files": 56,
+  "rows": 56,
+  "districts": [
+    "Akola",
+    "Amravati",
+    "Buldhana",
+    "Nagpur",
+    "Wardha",
+    "Washim",
+    "Yavatmal"
+  ],
+  "years": [
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "duplicates": 0,
+  "feature_count": 30,
+  "aid_mapping": [
+    {
+      "aid": "aid0001",
+      "feature_order": 1,
+      "district": "Akola"
+    },
+    {
+      "aid": "aid0002",
+      "feature_order": 2,
+      "district": "Amravati"
+    },
+    {
+      "aid": "aid0003",
+      "feature_order": 3,
+      "district": "Buldhana"
+    },
+    {
+      "aid": "aid0004",
+      "feature_order": 4,
+      "district": "Nagpur"
+    },
+    {
+      "aid": "aid0005",
+      "feature_order": 5,
+      "district": "Wardha"
+    },
+    {
+      "aid": "aid0006",
+      "feature_order": 6,
+      "district": "Washim"
+    },
+    {
+      "aid": "aid0007",
+      "feature_order": 7,
+      "district": "Yavatmal"
+    }
+  ]
+}

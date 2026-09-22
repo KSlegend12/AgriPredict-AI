@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap');
+@import "tailwindcss";
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f4f8f3;
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+  }
+  button, select { font-family: inherit; }
+}
+
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+
+.agri-card {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.045);
+}
+
+.agri-card-hover { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+.agri-card-hover:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(15,23,42,.08); border-color: #cbd5e1; }
+
+::-webkit-scrollbar { width: 7px; height: 7px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+::selection { background: #059669; color: white; }
+
+/* =========================================================
+   AgriPredict-AI theme system
+   Light/Dark mode is controlled by body.dark-theme.
+   ========================================================= */
+
+.theme-toggle,
+.theme-mobile-button,
+.app-header,
+.app-shell,
+.agri-card,
+.district-select,
+.mobile-menu {
+  transition: background-color .25s ease, color .25s ease, border-color .25s ease, box-shadow .25s ease;
+}
+
+.dark-theme {
+  background: #07130f;
+  color-scheme: dark;
+}
+
+.dark-theme body {
+  background: #07130f;
+  color: #e5f3ec;
+}
+
+.dark-theme .app-shell {
+  background: #07130f !important;
+  color: #e5f3ec;
+}
+
+.dark-theme .app-header {
+  background: rgba(8, 20, 15, .94) !important;
+  border-color: #1b3429 !important;
+  box-shadow: 0 2px 22px rgba(0, 0, 0, .28) !important;
+}
+
+.dark-theme .app-header .text-slate-950 { color: #f1f8f4 !important; }
+.dark-theme .app-header .text-slate-700 { color: #c8ddd3 !important; }
+.dark-theme .app-header .text-slate-600 { color: #b2c9bf !important; }
+.dark-theme .app-header .text-slate-500 { color: #93ada1 !important; }
+.dark-theme .app-header .text-slate-400 { color: #78968a !important; }
+
+.dark-theme .app-header .bg-white { background: #0d2119 !important; }
+.dark-theme .app-header .bg-slate-50 { background: #10271e !important; }
+.dark-theme .app-header .border-slate-200,
+.dark-theme .app-header .border-slate-100 { border-color: #234238 !important; }
+.dark-theme .app-header .hover\:bg-slate-50:hover { background: #153228 !important; }
+.dark-theme .app-header .bg-emerald-50 { background: rgba(16, 185, 129, .13) !important; }
+.dark-theme .app-header .text-emerald-700 { color: #6ee7b7 !important; }
+.dark-theme .app-header .border-emerald-100 { border-color: rgba(52, 211, 153, .25) !important; }
+.dark-theme .app-header .theme-toggle { background: #0d2119; border-color: #234238; color: #c8ddd3; }
+.dark-theme .app-header .theme-toggle:hover { border-color: #34d399; color: #6ee7b7; }
+.dark-theme .app-header .mobile-menu { border-color: #1b3429; }
+.dark-theme .app-header .theme-mobile-button { color: #c8ddd3; background: #10271e; }
+.dark-theme .app-header .theme-mobile-button:hover { background: #153228; }
+.dark-theme .app-header .mobile-menu .bg-slate-50 { background: #10271e !important; }
+.dark-theme .app-header .mobile-menu .text-slate-700 { color: #c8ddd3 !important; }
+.dark-theme .app-header .mobile-menu .hover\:bg-slate-50:hover { background: #153228 !important; }
+.dark-theme .district-select { color: #dceee6 !important; }
+.dark-theme .district-select option { background: #0d2119; color: #e5f3ec; }
+
+.dark-theme .agri-card {
+  background: #0d2119;
+  border-color: #203c31;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, .18);
+}
+.dark-theme .agri-card-hover:hover { border-color: #315b4a; box-shadow: 0 14px 34px rgba(0,0,0,.28); }
+
+/* Common Tailwind slate utilities used throughout the pages. */
+.dark-theme .text-slate-950 { color: #f1f8f4 !important; }
+.dark-theme .text-slate-900 { color: #e6f3ed !important; }
+.dark-theme .text-slate-800 { color: #d8ebe3 !important; }
+.dark-theme .text-slate-700 { color: #c5dbd1 !important; }
+.dark-theme .text-slate-600 { color: #aec6ba !important; }
+.dark-theme .text-slate-500 { color: #91aaa0 !important; }
+.dark-theme .text-slate-400 { color: #76938a !important; }
+.dark-theme .text-slate-300 { color: #c1d7ce !important; }
+.dark-theme .text-slate-200 { color: #d5e5df !important; }
+
+.dark-theme .bg-white { background-color: #0d2119 !important; }
+.dark-theme .bg-slate-50 { background-color: #10271e !important; }
+.dark-theme .bg-slate-100 { background-color: #173228 !important; }
+.dark-theme .border-slate-200 { border-color: #254438 !important; }
+.dark-theme .border-slate-100 { border-color: #1b3429 !important; }
+.dark-theme .border-slate-300 { border-color: #35584b !important; }
+
+.dark-theme .bg-emerald-50 { background-color: rgba(16, 185, 129, .13) !important; }
+.dark-theme .bg-emerald-100 { background-color: rgba(16, 185, 129, .18) !important; }
+.dark-theme .text-emerald-700 { color: #6ee7b7 !important; }
+.dark-theme .text-emerald-600 { color: #6ee7b7 !important; }
+.dark-theme .border-emerald-100 { border-color: rgba(52, 211, 153, .25) !important; }
+.dark-theme .border-emerald-200 { border-color: rgba(52, 211, 153, .35) !important; }
+
+/* Preserve intentionally dark hero/panel surfaces. */
+.dark-theme .bg-slate-950 { background-color: #030b08 !important; }
+.dark-theme .text-white { color: #f5fbf8 !important; }
+
+/* Common alert/context surfaces. */
+.dark-theme .bg-amber-50 { background-color: rgba(245, 158, 11, .10) !important; }
+.dark-theme .border-amber-200 { border-color: rgba(245, 158, 11, .30) !important; }
+.dark-theme .text-amber-800 { color: #f8c978 !important; }
+
+.dark-theme input,
+.dark-theme textarea,
+.dark-theme select {
+  color: #e5f3ec;
+}
+.dark-theme input::placeholder,
+.dark-theme textarea::placeholder { color: #6f8d81; }
+
+.dark-theme ::-webkit-scrollbar-track { background: #091a14; }
+.dark-theme ::-webkit-scrollbar-thumb { background: #29473b; }
+.dark-theme ::-webkit-scrollbar-thumb:hover { background: #3c6454; }
+
+@media (max-width: 767px) {
+  .dark-theme .app-header { background: rgba(8,20,15,.97) !important; }
+}

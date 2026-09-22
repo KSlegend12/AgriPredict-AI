@@ -1,0 +1,186 @@
+{
+  "dataset": "vidarbha_cotton_model_ready_1997_2024.csv",
+  "target": "yield_target_kg_ha",
+  "districts": [
+    "Akola",
+    "Amravati",
+    "Buldhana",
+    "Nagpur",
+    "Wardha",
+    "Washim",
+    "Yavatmal"
+  ],
+  "years": "1997-2024",
+  "holdout_2024_metrics": {
+    "MAE": 217.78,
+    "RMSE": 314.84,
+    "R2": -0.5694,
+    "MAPE": 38.35
+  },
+  "rolling_origin_metrics_2011_2024": {
+    "MAE": 115.06,
+    "RMSE": 160.62,
+    "R2": 0.1398,
+    "MAPE": 39.04
+  },
+  "baseline_comparison": [
+    {
+      "Method": "ML_RandomForest",
+      "MAE": 115.06,
+      "RMSE": 160.62,
+      "R2": 0.1398,
+      "MAPE": 39.04
+    },
+    {
+      "Method": "Baseline_PrevYear",
+      "MAE": 126.68,
+      "RMSE": 178.02,
+      "R2": -0.0567,
+      "MAPE": 44.73
+    },
+    {
+      "Method": "Baseline_HistMean",
+      "MAE": 147.3,
+      "RMSE": 207.8,
+      "R2": -0.4398,
+      "MAPE": 39.58
+    }
+  ],
+  "district_performance": [
+    {
+      "district": "Akola",
+      "MAE": 68.84,
+      "RMSE": 91.2,
+      "R2": 0.0007,
+      "MAPE": 23.85
+    },
+    {
+      "district": "Amravati",
+      "MAE": 165.93,
+      "RMSE": 192.36,
+      "R2": -0.2887,
+      "MAPE": 43.38
+    },
+    {
+      "district": "Buldhana",
+      "MAE": 118.59,
+      "RMSE": 140.27,
+      "R2": 0.1075,
+      "MAPE": 53.52
+    },
+    {
+      "district": "Nagpur",
+      "MAE": 106.73,
+      "RMSE": 136.93,
+      "R2": 0.1983,
+      "MAPE": 35.13
+    },
+    {
+      "district": "Wardha",
+      "MAE": 102.02,
+      "RMSE": 130.14,
+      "R2": -0.2012,
+      "MAPE": 27.64
+    },
+    {
+      "district": "Washim",
+      "MAE": 114.79,
+      "RMSE": 172.16,
+      "R2": 0.2529,
+      "MAPE": 40.9
+    },
+    {
+      "district": "Yavatmal",
+      "MAE": 128.55,
+      "RMSE": 224.22,
+      "R2": 0.1178,
+      "MAPE": 48.9
+    }
+  ],
+  "year_performance": [
+    {
+      "test_year": 2011,
+      "MAE": 41.88,
+      "RMSE": 47.37,
+      "R2": 0.43
+    },
+    {
+      "test_year": 2012,
+      "MAE": 68.37,
+      "RMSE": 96.01,
+      "R2": 0.3642
+    },
+    {
+      "test_year": 2013,
+      "MAE": 119.89,
+      "RMSE": 131.6,
+      "R2": 0.4438
+    },
+    {
+      "test_year": 2014,
+      "MAE": 106.95,
+      "RMSE": 119.19,
+      "R2": -9.0941
+    },
+    {
+      "test_year": 2015,
+      "MAE": 47.91,
+      "RMSE": 72.28,
+      "R2": 0.3736
+    },
+    {
+      "test_year": 2016,
+      "MAE": 208.32,
+      "RMSE": 228.84,
+      "R2": -0.9044
+    },
+    {
+      "test_year": 2017,
+      "MAE": 95.72,
+      "RMSE": 117.84,
+      "R2": -0.0077
+    },
+    {
+      "test_year": 2018,
+      "MAE": 47.34,
+      "RMSE": 65.08,
+      "R2": -1.0809
+    },
+    {
+      "test_year": 2019,
+      "MAE": 71.85,
+      "RMSE": 91.96,
+      "R2": -0.6994
+    },
+    {
+      "test_year": 2020,
+      "MAE": 189.4,
+      "RMSE": 234.56,
+      "R2": -3.4136
+    },
+    {
+      "test_year": 2021,
+      "MAE": 65.39,
+      "RMSE": 79.4,
+      "R2": 0.2636
+    },
+    {
+      "test_year": 2022,
+      "MAE": 101.97,
+      "RMSE": 129.33,
+      "R2": -0.9457
+    },
+    {
+      "test_year": 2023,
+      "MAE": 228.11,
+      "RMSE": 238.46,
+      "R2": -8.1971
+    },
+    {
+      "test_year": 2024,
+      "MAE": 217.78,
+      "RMSE": 314.84,
+      "R2": -0.5694
+    }
+  ]
+}

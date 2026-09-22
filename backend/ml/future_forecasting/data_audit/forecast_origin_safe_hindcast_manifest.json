@@ -1,0 +1,15 @@
+{
+  "method": "forecast-origin-safe hindcast audit using existing future horizon artifacts; weather proxy is expanding origin-only 10-year climatology with temperature trend and normal scenario",
+  "targets": "2015-2024",
+  "horizons": "1-7 where origin >= 2004",
+  "future_artifact_unchanged": true,
+  "production_model_unchanged": true,
+  "authoritative_dataset_unchanged": true,
+  "five_year_slice_2020_2024_horizons_3_7": {
+    "n": 175,
+    "model_mae": 93.80370653759272,
+    "model_rmse": 139.17533014582594,
+    "prev_year_mae": 216.95469049587214,
+    "prev_year_rmse": 276.20077593943057
+  }
+}

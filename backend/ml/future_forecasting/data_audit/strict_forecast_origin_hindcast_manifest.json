@@ -1,0 +1,7 @@
+{
+  "evaluation": "strict expanding rolling-origin; each target year trained only on earlier target years; target-year weather replaced by origin-only 10-year climatology plus temperature trend",
+  "test_years": "2015-2024",
+  "horizons": "1-7",
+  "production_artifacts_modified": false,
+  "authoritative_dataset_modified": false
+}

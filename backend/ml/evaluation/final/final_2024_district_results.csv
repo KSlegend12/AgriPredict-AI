@@ -1,0 +1,8 @@
+year,district,actual_kg_ha,predicted_kg_ha,error_kg_ha,abs_error_kg_ha,pct_error,model,training_years,holdout_year,baseline_pv_kg_ha,baseline_hm_kg_ha
+2024,Akola,261.49,396.12,-134.63,134.63,51.49,GradientBoosting,1997-2023,2024,443.49,251.66
+2024,Amravati,572.0,411.13,160.87,160.87,28.12,GradientBoosting,1997-2023,2024,581.79,279.65
+2024,Buldhana,280.83,439.28,-158.45,158.45,56.42,GradientBoosting,1997-2023,2024,427.62,251.18
+2024,Nagpur,390.35,509.12,-118.77,118.77,30.43,GradientBoosting,1997-2023,2024,563.17,212.16
+2024,Wardha,462.37,344.35,118.02,118.02,25.53,GradientBoosting,1997-2023,2024,567.73,279.81
+2024,Washim,550.24,403.24,147.0,147.0,26.72,GradientBoosting,1997-2023,2024,589.08,188.89
+2024,Yavatmal,1063.0,285.48,777.52,777.52,73.14,GradientBoosting,1997-2023,2024,389.55,148.65

@@ -1,0 +1,8 @@
+{
+  "rows_audited": 76,
+  "prototype_rows": 75,
+  "review_rows": 3,
+  "prototype_rows_reproduced_exactly": 75,
+  "review_rows_with_raw_match": 3,
+  "note": "Reproducing the prototype source is not the same as independent authoritative verification."
+}

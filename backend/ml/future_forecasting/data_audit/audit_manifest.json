@@ -1,0 +1,18 @@
+{
+  "DATA_AUDIT_GATE.md": {
+    "bytes": 2206,
+    "sha256": "378bc3d530fd19336d5f6914b42f3175217a54333d7c5655d9bd15c691daedec"
+  },
+  "future_forecast_audit.md": {
+    "bytes": 1202,
+    "sha256": "abed346ebd0a74a49c78e73566190f73d31d6d05868d224b1a961af943de6db7"
+  },
+  "target_provenance_summary.json": {
+    "bytes": 251,
+    "sha256": "b8d184fcc7c7802e64232ea7976957926342b5c51b02cb232544584b20b78b3c"
+  },
+  "target_provenance_audit.csv": {
+    "bytes": 14635,
+    "sha256": "b2754b7d0a72dab68bfd121cbcd52aadc34324518da0101da39b8bc82adabe86"
+  }
+}

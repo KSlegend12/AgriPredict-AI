@@ -1,0 +1,38 @@
+{
+  "source_dataset": "/mnt/data/vidarbha_cotton_model_ready_1997_2024.csv",
+  "source_rows": 194,
+  "source_years": [
+    1997,
+    2024
+  ],
+  "districts": [
+    "Akola",
+    "Amravati",
+    "Buldhana",
+    "Nagpur",
+    "Wardha",
+    "Washim",
+    "Yavatmal"
+  ],
+  "forecast_years": [
+    2027,
+    2028,
+    2029,
+    2030,
+    2031
+  ],
+  "origin_year": 2024,
+  "future_model_type": "direct horizon-specific supervised models",
+  "horizons": "1..7 years; forecasts use horizons 3..7 from 2024 origin",
+  "scenario_assumptions": {
+    "normal": "recent 10-year district weather climatology",
+    "dry": "rainfall x0.80, rain-day counts x0.85, heavy-event metrics x0.90, dry-spell metrics x1.20",
+    "wet": "rainfall x1.20, rain-day counts x1.15, heavy-event metrics x1.10, dry-spell metrics x0.85",
+    "temperature": "recent 10-year linear historical trend; no invented seasonal forecast"
+  },
+  "target_leakage_protection": [
+    "future target yield is never used as an input",
+    "future area is not taken from target-year actuals; only origin area and historical area slope are used",
+    "current validated 2024 model is not modified"
+  ]
+}
