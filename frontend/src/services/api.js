@@ -142,6 +142,21 @@ export const getCottonFutureForecast = async (district) => {
   }
 };
 
+export const getCotton2026ScenarioPrediction = async (district) => {
+  try {
+    const res = await api.get(
+      `/cotton/future-forecast/2026/${encodeURIComponent(district)}`
+    );
+    return res.data;
+  } catch (err) {
+    console.error(
+      'Cotton 2026 scenario prediction API error:',
+      err
+    );
+    throw err;
+  }
+};
+
 export const getCottonFutureForecastDistricts = async () => {
   try {
     const res = await api.get('/cotton/future-forecast/districts');

@@ -149,3 +149,14 @@
 @media (max-width: 767px) {
   .dark-theme .app-header { background: rgba(8,20,15,.97) !important; }
 }
+:root {
+  --forecast-tooltip-bg: #ffffff;
+  --forecast-tooltip-border: #e2e8f0;
+  --forecast-tooltip-text: #0f172a;
+}
+
+.dark {
+  --forecast-tooltip-bg: #0f172a;
+  --forecast-tooltip-border: #334155;
+  --forecast-tooltip-text: #f8fafc;
+}
