@@ -19,6 +19,13 @@ export default function ModelInsightsPage() {
   useEffect(() => { getCottonModelInfo().then(setInfo); }, []);
   const modelName = info?.model_name || info?.model || 'GradientBoostingRegressor';
 
+  const chartFeatures = (info?.global_shap_importance?.top_10_features || []).length > 0
+    ? info.global_shap_importance.top_10_features.slice(0, 8).map(f => ({
+        name: f.display_name?.length > 25 ? `${f.display_name.slice(0, 23)}…` : f.display_name,
+        value: Number(f.mean_abs_shap_kg_ha)
+      }))
+    : features;
+
   return (
     <div className="space-y-6">
       <Hero />
@@ -44,7 +51,7 @@ export default function ModelInsightsPage() {
 
         <div className="agri-card p-6 sm:p-7">
           <div className="flex items-end justify-between gap-4"><div><p className="text-[10px] font-extrabold uppercase tracking-widest text-emerald-600">Explainability</p><h2 className="mt-1 text-lg font-black">Global feature contribution</h2><p className="mt-1 text-xs text-slate-500">Mean absolute SHAP value on the 2024 holdout.</p></div><Info className="h-4 w-4 text-slate-400" /></div>
-          <div className="mt-5 h-72"><ResponsiveContainer width="100%" height="100%"><BarChart data={features} layout="vertical" margin={{ top: 5, right: 15, left: 10, bottom: 5 }}><CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" /><XAxis type="number" fontSize={10} /><YAxis type="category" dataKey="name" width={155} fontSize={10} tickLine={false} /><Tooltip formatter={(v) => [Number(v).toFixed(2), 'Mean |SHAP|']} /><Bar dataKey="value" fill="#059669" radius={[0, 5, 5, 0]} /></BarChart></ResponsiveContainer></div>
+          <div className="mt-5 h-72"><ResponsiveContainer width="100%" height="100%"><BarChart data={chartFeatures} layout="vertical" margin={{ top: 5, right: 15, left: 10, bottom: 5 }}><CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" /><XAxis type="number" fontSize={10} /><YAxis type="category" dataKey="name" width={155} fontSize={10} tickLine={false} /><Tooltip formatter={(v) => [Number(v).toFixed(2), 'Mean |SHAP|']} /><Bar dataKey="value" fill="#059669" radius={[0, 5, 5, 0]} /></BarChart></ResponsiveContainer></div>
         </div>
       </section>
 

@@ -1,8 +1,9 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Sprout, MapPin, ShieldCheck, ExternalLink } from 'lucide-react';
+import { SUPPORTED_VIDARBHA_DISTRICTS } from '../constants/districts';
 
-const DISTRICTS = ['Akola', 'Amravati', 'Buldhana', 'Nagpur', 'Wardha', 'Washim', 'Yavatmal'];
+const DISTRICTS = SUPPORTED_VIDARBHA_DISTRICTS;
 
 export default function Footer() {
   return (
@@ -14,7 +15,7 @@ export default function Footer() {
               <div className="h-10 w-10 rounded-2xl bg-emerald-600 flex items-center justify-center text-white"><Sprout className="h-5 w-5" /></div>
               <div className="text-lg font-extrabold text-white">AgriPredict<span className="text-emerald-400">AI</span></div>
             </div>
-            <p className="mt-4 text-sm leading-6 text-slate-400">AI-powered cotton yield decision support for seven Vidarbha districts, combining agricultural, weather and satellite-derived signals.</p>
+            <p className="mt-4 text-sm leading-6 text-slate-400">AI-powered cotton yield decision support for the six Vidarbha districts, combining agricultural, weather and satellite-derived signals.</p>
           </div>
 
           <div>

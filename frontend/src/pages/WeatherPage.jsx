@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { CloudSun, MapPin, Droplets, Thermometer, Calendar } from 'lucide-react';
 import { getWeather } from '../services/api';
+import { SUPPORTED_VIDARBHA_DISTRICTS, sanitizeDistrict } from '../constants/districts';
 
-const VIDARBHA_DISTRICTS = ['Akola', 'Amravati', 'Buldhana', 'Nagpur', 'Wardha', 'Washim', 'Yavatmal'];
+const VIDARBHA_DISTRICTS = SUPPORTED_VIDARBHA_DISTRICTS;
 
 const DISTRICT_WEATHER_PRESETS = {
   Akola: { annual_rain: 820.0, monsoon_rain: 721.6, kharif_rain: 754.4, tmax_mean: 33.5, tmin_mean: 20.2, rainy_days: 64, heavy_rain_days: 6, max_dry_spell: 20 },
@@ -11,11 +12,10 @@ const DISTRICT_WEATHER_PRESETS = {
   Nagpur: { annual_rain: 1100.0, monsoon_rain: 968.0, kharif_rain: 1012.0, tmax_mean: 32.1, tmin_mean: 19.2, rainy_days: 80, heavy_rain_days: 9, max_dry_spell: 14 },
   Wardha: { annual_rain: 980.0, monsoon_rain: 862.4, kharif_rain: 901.6, tmax_mean: 33.9, tmin_mean: 20.9, rainy_days: 72, heavy_rain_days: 8, max_dry_spell: 16 },
   Washim: { annual_rain: 850.0, monsoon_rain: 748.0, kharif_rain: 782.0, tmax_mean: 33.5, tmin_mean: 20.2, rainy_days: 62, heavy_rain_days: 6, max_dry_spell: 20 },
-  Yavatmal: { annual_rain: 950.0, monsoon_rain: 836.0, kharif_rain: 874.0, tmax_mean: 34.1, tmin_mean: 20.9, rainy_days: 70, heavy_rain_days: 7, max_dry_spell: 18 },
 };
 
 export default function WeatherPage({ selectedDistrict, setSelectedDistrict }) {
-  const currentDistrict = VIDARBHA_DISTRICTS.includes(selectedDistrict) ? selectedDistrict : 'Akola';
+  const currentDistrict = sanitizeDistrict(selectedDistrict);
   const [weatherData, setWeatherData] = useState(null);
 
   useEffect(() => {

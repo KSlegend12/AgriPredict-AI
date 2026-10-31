@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { ShieldCheck, CloudSun, History, Layers, MapPin, AlertCircle, Info } from 'lucide-react';
+import React from 'react';
+import { ShieldCheck, CloudSun, History, Layers, MapPin, AlertCircle } from 'lucide-react';
+import { SUPPORTED_VIDARBHA_DISTRICTS, sanitizeDistrict } from '../constants/districts';
 
-const VIDARBHA_DISTRICTS = ['Akola', 'Amravati', 'Buldhana', 'Nagpur', 'Wardha', 'Washim', 'Yavatmal'];
+const VIDARBHA_DISTRICTS = SUPPORTED_VIDARBHA_DISTRICTS;
 
 export default function RecommendationPage({ selectedDistrict, setSelectedDistrict }) {
-  const currentDistrict = VIDARBHA_DISTRICTS.includes(selectedDistrict) ? selectedDistrict : 'Akola';
+  const currentDistrict = sanitizeDistrict(selectedDistrict);
 
   return (
     <div className="space-y-8 py-4 max-w-7xl mx-auto">
@@ -20,7 +21,7 @@ export default function RecommendationPage({ selectedDistrict, setSelectedDistri
             Decision Support & Advisory Signals
           </h1>
           <p className="text-xs text-slate-500 font-normal">
-            Evidence-based advisory signals derived from weather, historical momentum, and model feature attributions.
+            Evidence-based advisory signals derived from weather, historical momentum, and model feature attributions for Vidarbha cotton.
           </p>
         </div>
 
@@ -115,7 +116,7 @@ export default function RecommendationPage({ selectedDistrict, setSelectedDistri
 
         <div className="space-y-3 text-xs text-slate-700">
           <div className="p-4 rounded-lg bg-slate-50 border border-slate-200 space-y-1">
-            <span className="font-bold text-slate-900 block">Random Forest + SHAP Feature Weights</span>
+            <span className="font-bold text-slate-900 block">Gradient Boosting + SHAP Feature Weights</span>
             <p className="text-slate-600 leading-relaxed font-normal">
               Feature attribution analysis reveals that prior lag yield and Kharif maximum temperature account for over 50% of model prediction variance. Prioritize field soil health and heat stress monitoring during peak vegetative stages.
             </p>

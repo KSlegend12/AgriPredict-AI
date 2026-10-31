@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Sprout, MapPin, Sparkles, Menu, X, ChevronDown, BarChart3, Satellite, BrainCircuit, Workflow, Sun, Moon } from 'lucide-react';
+import { Sprout, MapPin, Sparkles, Menu, X, ChevronDown, BarChart3, Satellite, BrainCircuit, Workflow, Sun, Moon, CloudSun, History, TrendingUp } from 'lucide-react';
+import { SUPPORTED_VIDARBHA_DISTRICTS, sanitizeDistrict } from '../constants/districts';
 
-const DISTRICTS = ['Akola', 'Amravati', 'Buldhana', 'Nagpur', 'Wardha', 'Washim', 'Yavatmal'];
+const DISTRICTS = SUPPORTED_VIDARBHA_DISTRICTS;
 
 const links = [
   { to: '/dashboard', label: 'Dashboard', icon: BarChart3 },
-  { to: '/cotton', label: 'Prediction', icon: Sparkles },
-  { to: '/insights', label: 'Model Insights', icon: BrainCircuit },
+  { to: '/cotton', label: 'Cotton Yield', icon: Sparkles },
+  { to: '/recommend', label: 'Advisory Signals', icon: Sprout },
+  { to: '/weather', label: 'Weather', icon: CloudSun },
+  { to: '/future-forecast', label: 'Forecast', icon: TrendingUp },
+  { to: '/history', label: 'History', icon: History },
+  { to: '/insights', label: 'Insights', icon: BrainCircuit },
   { to: '/satellite', label: 'Satellite', icon: Satellite },
-  { to: '/future-forecast', label: 'Forecast', icon: BarChart3 },
   { to: '/how-it-works', label: 'How It Works', icon: Workflow },
 ];
 
 export default function Navbar({ selectedDistrict, setSelectedDistrict, isRealModel, theme, setTheme }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
-  const district = DISTRICTS.includes(selectedDistrict) ? selectedDistrict : 'Akola';
+  const district = sanitizeDistrict(selectedDistrict);
   const isDark = theme === 'dark';
 
   const toggleTheme = () => setTheme(isDark ? 'light' : 'dark');
@@ -105,8 +109,6 @@ export default function Navbar({ selectedDistrict, setSelectedDistrict, isRealMo
             </button>
             <NavLink to="/" end onClick={() => setMobileOpen(false)} className={mobileClass}>Home</NavLink>
             {links.map(({ to, label }) => <NavLink key={to} to={to} onClick={() => setMobileOpen(false)} className={mobileClass}>{label}</NavLink>)}
-            <NavLink to="/history" onClick={() => setMobileOpen(false)} className={mobileClass}>History</NavLink>
-            <NavLink to="/weather" onClick={() => setMobileOpen(false)} className={mobileClass}>Weather</NavLink>
             <NavLink to="/about" onClick={() => setMobileOpen(false)} className={mobileClass}>About</NavLink>
           </div>
         )}

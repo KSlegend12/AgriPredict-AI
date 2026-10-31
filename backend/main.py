@@ -1,15 +1,18 @@
 import os
 import json
+import logging
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response, Request, status, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.responses import JSONResponse
 
 from backend.routes import (
     districts,
     weather,
     crop,
     yield_predict,
-    history
+    history,
+    field_validation
 )
 
 from backend.routes import cotton
@@ -17,31 +20,64 @@ from backend.routes.future_forecast import router as future_forecast_router
 
 from backend.ml.predictor import predictor_instance
 from backend.ml.cotton_predictor import cotton_predictor
+from backend.security import RateLimitMiddleware, SecurityFilterMiddleware
+
+logger = logging.getLogger("agripredict")
+logging.basicConfig(level=logging.INFO)
 
 
 app = FastAPI(
-    title="AgriPredict AI Backend",
+    title="AgriPredict AI — Vidarbha Cotton Decision Support",
     description=(
-        "AIML Decision-Support System for Maharashtra Farmers — "
-        "Crop suitability (Tomato, Onion, Sugarcane) + "
-        "Cotton Yield Prediction for 7 Vidarbha districts "
-        "(validated model trained on 1997–2023 data)"
+        "Post-Monsoon Pre-Harvest Cotton Yield Estimation and Decision Support System for Six Vidarbha Districts "
+        "(Akola, Amravati, Buldhana, Nagpur, Wardha, Washim; validated model trained on 1997–2023 data, 2024 holdout)"
     ),
-    version="2.0.0"
+    version="2.2.0"
 )
 
 
 # =========================================================
-# CORS
+# SECURITY & CORS MIDDLEWARE
 # =========================================================
+# Execution order: CORS -> SecurityFilter -> RateLimiter -> Router
+_allowed_origins = os.getenv(
+    "ALLOWED_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
+).split(",")
 
+app.add_middleware(RateLimitMiddleware)
+app.add_middleware(SecurityFilterMiddleware)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=_allowed_origins,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# =========================================================
+# GLOBAL UNHANDLED EXCEPTION HANDLER
+# =========================================================
+# Prevents internal traceback leakage to HTTP clients
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    if isinstance(exc, HTTPException):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={"status": "error", "detail": exc.detail},
+            headers=getattr(exc, "headers", None)
+        )
+    logger.error("Unhandled exception on %s %s: %s", request.method, request.url.path, exc, exc_info=True)
+    return JSONResponse(
+        status_code=500,
+        content={
+            "status": "error",
+            "message": "An internal server error occurred.",
+            "detail": "An internal error occurred while processing the request."
+        }
+    )
+
 
 
 # =========================================================
@@ -61,6 +97,7 @@ app.include_router(history.router)
 
 app.include_router(cotton.router)
 app.include_router(future_forecast_router)
+app.include_router(field_validation.router)
 
 
 # =========================================================
@@ -136,26 +173,35 @@ def health_check():
         "geographic_scope":
             "Maharashtra, India",
 
+        "crop":
+            "Cotton",
+
+        "supported_districts": [
+            "Akola",
+            "Amravati",
+            "Buldhana",
+            "Nagpur",
+            "Wardha",
+            "Washim"
+        ],
 
         "modules": {
 
             # =============================================
-            # Existing crop suitability module
+            # Cotton suitability module (Cotton only)
             # =============================================
 
             "crop_suitability": {
 
                 "crops": [
-                    "Tomato",
-                    "Onion",
-                    "Sugarcane"
+                    "Cotton"
                 ],
 
                 "is_loaded":
                     getattr(
                         predictor_instance,
                         "is_loaded",
-                        True
+                        False
                     ),
 
                 "metrics":
@@ -178,8 +224,7 @@ def health_check():
                     "Buldhana",
                     "Nagpur",
                     "Wardha",
-                    "Washim",
-                    "Yavatmal"
+                    "Washim"
                 ],
 
 
@@ -304,6 +349,36 @@ def health_check():
                 }
             }
         }
+    }
+
+
+# =========================================================
+# READINESS CHECK
+# =========================================================
+
+@app.get("/api/ready")
+def readiness_check(response: Response):
+    """Readiness probe — reports whether all models are loaded.
+    Returns 503 if any model is not loaded; 200 if all ready."""
+
+    cotton_ready = cotton_predictor.is_loaded
+    crop_ready = getattr(predictor_instance, "is_loaded", False)
+
+    all_ready = cotton_ready and crop_ready
+
+    if not all_ready:
+        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
+
+    return {
+        "ready": all_ready,
+        "models": {
+            "cotton_yield": {
+                "loaded": cotton_ready,
+            },
+            "crop_suitability": {
+                "loaded": crop_ready,
+            },
+        },
     }
 
 

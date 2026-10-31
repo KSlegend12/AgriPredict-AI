@@ -15,11 +15,13 @@ import numpy as np
 import pandas as pd
 
 
+from backend.config import CANONICAL_COTTON_DATASET_PATH
+
 HERE = Path(__file__).resolve()
 BACKEND_DIR = HERE.parents[2]
 MODULE_DIR = BACKEND_DIR / "ml" / "future_forecasting"
 
-DATA_PATH = BACKEND_DIR / "data" / "vidarbha_cotton_model_ready_1997_2024.csv"
+DATA_PATH = CANONICAL_COTTON_DATASET_PATH
 
 MODEL_PATH = MODULE_DIR / "artifacts" / "future_horizon_models.joblib"
 
@@ -35,7 +37,6 @@ DISTRICTS = [
     "Nagpur",
     "Wardha",
     "Washim",
-    "Yavatmal",
 ]
 
 SCENARIOS = ("normal", "dry", "wet")
@@ -308,11 +309,14 @@ def _future_row(
 
 
 def forecast_district(district: str):
-    if district not in DISTRICTS:
+    cleaned = district.strip()
+    matched = next((d for d in DISTRICTS if d.lower() == cleaned.lower()), None)
+    if not matched:
         raise ValueError(
-            f"Unknown district: {district}. "
-            f"Allowed: {', '.join(DISTRICTS)}"
+            f"Unknown district: '{district}'. "
+            f"Allowed Vidarbha districts: {', '.join(DISTRICTS)}"
         )
+    district = matched
 
     df, models, uncertainty = _load()
 
@@ -322,6 +326,12 @@ def forecast_district(district: str):
         "forecast_years": list(FORECAST_YEARS),
         "scenarios": {},
         "method": "direct horizon-specific ML models",
+        "data_provenance": {
+            "origin_features": "Authoritative historical panel through 2024 (lags, rolling stats, sown area)",
+            "future_weather": "10-year historical climatology with linear temperature trend and scenario multipliers",
+            "satellite_status": "NASA SMAP observations used up to origin year 2024; unobserved for 2027-2031",
+            "uncertainty_calibration": "Empirical horizon-specific error quantiles (Q90) calibrated on 2015-2020 out-of-sample data"
+        },
         "weather_note": (
             "2027-2031 weather is scenario-based, "
             "not verified future weather."

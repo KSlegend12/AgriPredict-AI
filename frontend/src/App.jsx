@@ -13,16 +13,35 @@ import HistoryPage from './pages/HistoryPage';
 import AboutPage from './pages/AboutPage';
 import SatelliteDataPage from './pages/SatelliteDataPage';
 import HowItWorksPage from './pages/HowItWorksPage';
+import ErrorBoundary from './components/ErrorBoundary';
 import { getHealth } from './services/api';
+import { sanitizeDistrict } from './constants/districts';
 
 export default function App() {
-  const [selectedDistrict, setSelectedDistrict] = useState('Akola');
+  const [selectedDistrict, setSelectedDistrictState] = useState(() => {
+    const saved = localStorage.getItem('agripredict-district');
+    return sanitizeDistrict(saved);
+  });
+
+  const setSelectedDistrict = (dist) => {
+    const clean = sanitizeDistrict(dist);
+    setSelectedDistrictState(clean);
+    localStorage.setItem('agripredict-district', clean);
+  };
+
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('agripredict-theme');
     if (saved === 'dark' || saved === 'light') return saved;
     return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
   const [isRealModel, setIsRealModel] = useState(false);
+
+  useEffect(() => {
+    const clean = sanitizeDistrict(selectedDistrict);
+    if (clean !== selectedDistrict) {
+      setSelectedDistrictState(clean);
+    }
+  }, [selectedDistrict]);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
@@ -48,20 +67,22 @@ export default function App() {
         />
 
         <main className="flex-1 w-full max-w-[1500px] mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-          <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/dashboard" element={<Dashboard selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
-            <Route path="/cotton" element={<CottonYieldPage selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
-            <Route path="/yield" element={<CottonYieldPage selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
-            <Route path="/future-forecast" element={<FutureCottonForecastPage selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
-            <Route path="/insights" element={<ModelInsightsPage />} />
-            <Route path="/satellite" element={<SatelliteDataPage />} />
-            <Route path="/how-it-works" element={<HowItWorksPage />} />
-            <Route path="/weather" element={<WeatherPage selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
-            <Route path="/history" element={<HistoryPage />} />
-            <Route path="/recommend" element={<RecommendationPage selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
-            <Route path="/about" element={<AboutPage />} />
-          </Routes>
+          <ErrorBoundary>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/dashboard" element={<Dashboard selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
+              <Route path="/cotton" element={<CottonYieldPage selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
+              <Route path="/yield" element={<CottonYieldPage selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
+              <Route path="/future-forecast" element={<FutureCottonForecastPage selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
+              <Route path="/insights" element={<ModelInsightsPage />} />
+              <Route path="/satellite" element={<SatelliteDataPage />} />
+              <Route path="/how-it-works" element={<HowItWorksPage />} />
+              <Route path="/weather" element={<WeatherPage selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
+              <Route path="/history" element={<HistoryPage />} />
+              <Route path="/recommend" element={<RecommendationPage selectedDistrict={selectedDistrict} setSelectedDistrict={setSelectedDistrict} />} />
+              <Route path="/about" element={<AboutPage />} />
+            </Routes>
+          </ErrorBoundary>
         </main>
 
         <Footer />

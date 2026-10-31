@@ -1,15 +1,16 @@
 import React from 'react';
 import { Database, MapPin, ShieldCheck, BrainCircuit, Satellite, Code2, Target, AlertTriangle } from 'lucide-react';
+import { SUPPORTED_VIDARBHA_DISTRICTS } from '../constants/districts';
 
-const districts = ['Akola', 'Amravati', 'Buldhana', 'Nagpur', 'Wardha', 'Washim', 'Yavatmal'];
+const districts = SUPPORTED_VIDARBHA_DISTRICTS;
 
 export default function AboutPage() {
   return (
     <div className="space-y-6">
-      <section className="rounded-[28px] bg-slate-950 p-7 sm:p-10 text-white"><div className="inline-flex items-center gap-2 rounded-full bg-emerald-400/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-emerald-300"><Target className="h-3.5 w-3.5" /> Project overview</div><h1 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight">AgriPredictAI</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">AI-powered cotton yield decision support for seven Vidarbha districts of Maharashtra, with transparent temporal validation and SHAP-based explainability.</p></section>
+      <section className="rounded-[28px] bg-slate-950 p-7 sm:p-10 text-white"><div className="inline-flex items-center gap-2 rounded-full bg-emerald-400/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-emerald-300"><Target className="h-3.5 w-3.5" /> Project overview</div><h1 className="mt-4 text-3xl sm:text-4xl font-black tracking-tight">AgriPredictAI</h1><p className="mt-2 max-w-3xl text-sm leading-6 text-slate-300">Post-Monsoon Pre-Harvest Cotton Yield Estimation and Decision Support System for Six Vidarbha Districts (Akola, Amravati, Buldhana, Nagpur, Wardha, Washim), utilizing realized Kharif weather through October 31 with transparent empirical error bounds and SHAP-based explainability.</p></section>
 
       <section className="grid gap-4 md:grid-cols-3">
-        <Card icon={MapPin} title="Study area" text="Seven Vidarbha districts: Akola, Amravati, Buldhana, Nagpur, Wardha, Washim and Yavatmal." />
+        <Card icon={MapPin} title="Study area" text="Six Vidarbha districts: Akola, Amravati, Buldhana, Nagpur, Wardha, and Washim." />
         <Card icon={Database} title="Authoritative dataset" text="194 district-year observations covering 1997–2024, with 2024 preserved as the final holdout." />
         <Card icon={BrainCircuit} title="Selected model" text="GradientBoostingRegressor with n_estimators=100, learning_rate=0.05 and max_depth=3." />
         <Card icon={Satellite} title="Earth observation" text="MOD13, MOD16, MOD17 and MOD11 extractions are available; SMAP and MOD15 are processing." />

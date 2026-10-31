@@ -1,3 +1,20 @@
+"""
+SYNTHETIC BENCHMARK DATASET GENERATOR
+=====================================
+PROVENANCE CLASSIFICATION: synthetic_benchmark
+
+CRITICAL NOTICE (Phase 12/13 Integrity Audit):
+This script generates SYNTHETIC benchmark observations using hand-crafted Gaussian centroids
+and parameterized equations for Tomato, Onion, and Sugarcane.
+
+STRICT RESEARCH BOUNDARY:
+- Outputs of this generator MUST NOT be cited or described as government survey data,
+  official university records, or authentic farmer field observations.
+- Accuracy metrics computed on datasets produced by this script represent synthetic cluster
+  separability, NOT real-world agricultural generalization.
+- Preserved strictly for pipeline architecture testing and backward reproducibility.
+"""
+
 import os
 import sys
 import numpy as np
@@ -12,6 +29,10 @@ if hasattr(sys.stdout, 'reconfigure'):
         pass
 
 def generate_real_maharashtra_dataset(num_samples=3000, seed=42):
+    """
+    Generate synthetic benchmark dataset for multi-crop classification testing.
+    NOTE: Despite the legacy function name, this generates SYNTHETIC Gaussian data.
+    """
     np.random.seed(seed)
     districts = list(MAHARASHTRA_DISTRICTS.keys())
     crops = ["Tomato", "Onion", "Sugarcane"]

@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, BarChart3, BrainCircuit, CalendarDays, CheckCircle2, ChevronRight, CloudSun, Database, Leaf, MapPin, Satellite, ShieldCheck, Sparkles, Sprout, TrendingUp } from 'lucide-react';
+import { SUPPORTED_VIDARBHA_DISTRICTS } from '../constants/districts';
 
-
-const districts = ['Akola', 'Amravati', 'Buldhana', 'Nagpur', 'Wardha', 'Washim', 'Yavatmal'];
+const districts = SUPPORTED_VIDARBHA_DISTRICTS;
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function LandingPage() {
               Cotton yield intelligence for <span className="text-emerald-400">Vidarbha.</span>
             </h1>
             <p className="mt-5 max-w-2xl text-sm sm:text-base leading-7 text-slate-300">
-              AgriPredictAI combines historical cotton yield, weather and engineered agricultural signals with a Gradient Boosting model and SHAP explanations for district-level decision support.
+              AgriPredict-AI is a Post-Monsoon Pre-Harvest Cotton Yield Estimation and Decision Support System for Six Vidarbha Districts, utilizing realized Kharif weather through October 31 and SHAP explainability.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <button onClick={() => navigate('/cotton')} className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-extrabold text-slate-950 hover:bg-emerald-400 transition">
@@ -31,7 +31,7 @@ export default function LandingPage() {
               </button>
             </div>
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-xs text-slate-400">
-              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-400" /> 7 districts</span>
+              <span className="inline-flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-emerald-400" /> 6 districts</span>
               <span className="inline-flex items-center gap-2"><CalendarDays className="h-4 w-4 text-emerald-400" /> 1997–2024 historical data</span>
               <span className="inline-flex items-center gap-2"><BrainCircuit className="h-4 w-4 text-emerald-400" /> SHAP explainability</span>
             </div>
@@ -45,7 +45,7 @@ export default function LandingPage() {
                 className="h-[330px] sm:h-[390px] w-full object-cover"
               />
               <div className="absolute inset-x-5 bottom-5 grid grid-cols-2 gap-3">
-                <div className="rounded-2xl border border-white/10 bg-slate-950/85 p-4 backdrop-blur-xl"><div className="text-2xl font-black text-emerald-400">7</div><div className="mt-1 text-[10px] uppercase tracking-widest text-slate-300">Target districts</div></div>
+                <div className="rounded-2xl border border-white/10 bg-slate-950/85 p-4 backdrop-blur-xl"><div className="text-2xl font-black text-emerald-400">6</div><div className="mt-1 text-[10px] uppercase tracking-widest text-slate-300">Target districts</div></div>
                 <div className="rounded-2xl border border-white/10 bg-slate-950/85 p-4 backdrop-blur-xl"><div className="text-2xl font-black text-cyan-300">28</div><div className="mt-1 text-[10px] uppercase tracking-widest text-slate-300">Harvest years</div></div>
               </div>
             </div>
@@ -54,7 +54,7 @@ export default function LandingPage() {
       </section>
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Feature icon={MapPin} title="7 Vidarbha districts" text="Akola, Amravati, Buldhana, Nagpur, Wardha, Washim and Yavatmal." />
+        <Feature icon={MapPin} title="6 Vidarbha districts" text="Akola, Amravati, Buldhana, Nagpur, Wardha, and Washim." />
         <Feature icon={CloudSun} title="Weather signals" text="Rainfall, temperature, extremes and seasonal features engineered for cotton." />
         <Feature icon={Satellite} title="Satellite stack" text="MODIS and SMAP datasets are being evaluated as additional signals." />
         <Feature icon={BrainCircuit} title="Explainable AI" text="SHAP feature contributions make individual predictions inspectable." />

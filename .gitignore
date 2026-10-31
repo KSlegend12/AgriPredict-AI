@@ -64,3 +64,24 @@ backend/database/*.db
 # Local backup files
 *.backup
 
+
+# Local SQLite databases and runtime data
+*.db
+*.sqlite
+*.sqlite3
+agripredict.db
+backend/data/
+
+# Backups and temporary outputs
+**/backups/
+frontend/test-results/
+playwright-report/
+test-results/
+
+# Experimental research outputs (keep source scripts)
+backend/ml/experiments/
+backend/ml/data_staging/
+backend/ml/evaluation/experimental_2025_train_to_2024/
+backend/ml/evaluation/experimental_improvement/
+
+# Local generated artifacts

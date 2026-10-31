@@ -8,9 +8,9 @@ from sklearn.linear_model import Ridge
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
-ROOT=Path('/mnt/data/current_audit/AgriPredict-AI')
-DATA=ROOT/'backend/data/vidarbha_cotton_model_ready_1997_2024.csv'
-OUT=ROOT/'backend/ml/future_forecasting/data_audit'
+ROOT = Path(__file__).resolve().parents[4]
+DATA = ROOT / 'data' / 'vidarbha_cotton_model_ready_1997_2024.csv'
+OUT = ROOT / 'backend' / 'ml' / 'future_forecasting' / 'data_audit'
 df=pd.read_csv(DATA).sort_values(['district','year']).reset_index(drop=True)
 DISTS=sorted(df.district.unique())
 WEATHER_PREFIXES=("tmax_","tmin_","rainfall_","rainy_days_","heavy_rain_days_","max_5day_","max_dry_spell_")

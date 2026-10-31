@@ -19,7 +19,8 @@ from sklearn.ensemble import (
 warnings.filterwarnings("ignore")
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_PATH = os.path.join(SCRIPT_DIR, "..", "data", "vidarbha_cotton_model_ready_1997_2024.csv")
+from backend.config import CANONICAL_COTTON_DATASET_PATH
+DATA_PATH = str(CANONICAL_COTTON_DATASET_PATH)
 ARTIFACTS_DIR = os.path.join(SCRIPT_DIR, "artifacts")
 EVAL_DIR = os.path.join(SCRIPT_DIR, "evaluation", "final")
 PLOTS_DIR = os.path.join(EVAL_DIR, "plots")

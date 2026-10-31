@@ -2,11 +2,11 @@ from pathlib import Path
 import joblib, numpy as np, pandas as pd, json
 from sklearn.metrics import mean_absolute_error, mean_squared_error
 
-ROOT=Path('/mnt/data/current_audit/AgriPredict-AI')
-DATA=ROOT/'backend/data/vidarbha_cotton_model_ready_1997_2024.csv'
-ART=ROOT/'backend/ml/future_forecasting/artifacts/future_horizon_models.joblib'
-OUT=ROOT/'backend/ml/future_forecasting/data_audit'
-OUT.mkdir(parents=True,exist_ok=True)
+ROOT = Path(__file__).resolve().parents[4]
+DATA = ROOT / 'data' / 'vidarbha_cotton_model_ready_1997_2024.csv'
+ART = ROOT / 'backend' / 'ml' / 'future_forecasting' / 'artifacts' / 'future_horizon_models.joblib'
+OUT = ROOT / 'backend' / 'ml' / 'future_forecasting' / 'data_audit'
+OUT.mkdir(parents=True, exist_ok=True)
 
 df=pd.read_csv(DATA).sort_values(['district','year']).reset_index(drop=True)
 models=joblib.load(ART)

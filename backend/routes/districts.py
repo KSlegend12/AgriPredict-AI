@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from backend.config import MAHARASHTRA_DISTRICTS, ALLOWED_CROPS
+from backend.config import MAHARASHTRA_DISTRICTS, ALLOWED_CROPS, SUPPORTED_VIDARBHA_DISTRICTS
 
 router = APIRouter()
 
@@ -19,5 +19,6 @@ def get_districts():
         "state": "Maharashtra",
         "total_districts": len(district_list),
         "allowed_crops": ALLOWED_CROPS,
-        "districts": district_list
+        "districts": district_list,
+        "vidarbha_scope_districts": SUPPORTED_VIDARBHA_DISTRICTS
     }

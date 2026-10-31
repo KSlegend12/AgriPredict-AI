@@ -23,17 +23,11 @@ import {
   getCottonWeather,
   predictCottonYield,
 } from '../services/api';
+import { SUPPORTED_VIDARBHA_DISTRICTS, sanitizeDistrict } from '../constants/districts';
+import WhyThisPrediction from '../components/WhyThisPrediction';
 
 
-const VIDARBHA_DISTRICTS = [
-  'Akola',
-  'Amravati',
-  'Buldhana',
-  'Nagpur',
-  'Wardha',
-  'Washim',
-  'Yavatmal',
-];
+const VIDARBHA_DISTRICTS = SUPPORTED_VIDARBHA_DISTRICTS;
 
 
 const PREDICTION_YEARS = Array.from(
@@ -139,16 +133,20 @@ export default function CottonYieldPage({
   setSelectedDistrict,
 }) {
 
-  const initialDistrict =
-    VIDARBHA_DISTRICTS.includes(
-      selectedDistrict
-    )
-      ? selectedDistrict
-      : 'Akola';
-
+  const initialDistrict = sanitizeDistrict(selectedDistrict);
 
   const [district, setDistrict] =
     useState(initialDistrict);
+
+  const [selectedModelVersion, setSelectedModelVersion] =
+    useState('candidate_six_district_thermal');
+
+  useEffect(() => {
+    const clean = sanitizeDistrict(selectedDistrict);
+    if (clean !== district) {
+      setDistrict(clean);
+    }
+  }, [selectedDistrict]);
 
   const [year, setYear] =
     useState(2024);
@@ -197,7 +195,8 @@ export default function CottonYieldPage({
       ] = await Promise.all([
         getCottonPredictionInput(
           district,
-          year
+          year,
+          selectedModelVersion
         ),
 
         getCottonWeather(
@@ -237,7 +236,7 @@ export default function CottonYieldPage({
 
 
   // ==========================================================
-  // RESET WHEN DISTRICT CHANGES
+  // RESET WHEN DISTRICT, YEAR, OR MODEL CHANGES
   // ==========================================================
 
   useEffect(() => {
@@ -249,7 +248,7 @@ export default function CottonYieldPage({
     setErrorMessage(null);
     setActiveStep(1);
 
-  }, [district]);
+  }, [district, year, selectedModelVersion]);
 
 
   // ==========================================================
@@ -273,6 +272,24 @@ export default function CottonYieldPage({
 
     if (!inputData) return;
 
+    if (
+      (selectedModelVersion === 'candidate_satellite_smap' ||
+        selectedModelVersion === 'candidate_regularized_ensemble') &&
+      (year < 2018 || year > 2024)
+    ) {
+      setErrorMessage(
+        `NASA SMAP satellite candidate models are only supported for years 2018–2024 with verified satellite coverage. Year ${year} is outside verified satellite availability. Please switch to the Production or Delta-Rolling model.`
+      );
+      return;
+    }
+
+    if (!VIDARBHA_DISTRICTS.includes(district)) {
+      setErrorMessage(
+        `Please select a supported district: ${VIDARBHA_DISTRICTS.join(', ')}.`
+      );
+      return;
+    }
+
     setIsPredicting(true);
     setErrorMessage(null);
 
@@ -282,6 +299,7 @@ export default function CottonYieldPage({
         await predictCottonYield({
           district,
           target_year: year,
+          model_version: selectedModelVersion,
         });
 
 
@@ -376,8 +394,8 @@ export default function CottonYieldPage({
 
           <p className="text-xs text-slate-500 dark:text-slate-400">
 
-            Verified historical weather + agricultural features
-            → validated GradientBoosting model.
+            Verified historical weather + thermal stress features
+            → Six-District Thermal Ridge model.
 
           </p>
 
@@ -567,6 +585,55 @@ export default function CottonYieldPage({
 
               </p>
 
+              {/* Empirically Calibrated Out-of-Fold Error Bounds */}
+              {prediction.prediction_interval && (
+                <div className="mt-2 rounded-lg border border-slate-200 bg-slate-50/80 p-3 text-left dark:border-slate-700 dark:bg-slate-800/60">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-slate-700 dark:text-slate-300">
+                      {prediction.prediction_interval.description || "Empirically Calibrated Out-of-Fold Error Bounds"}
+                    </span>
+                    <span className="rounded bg-indigo-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-indigo-700 dark:bg-indigo-950/70 dark:text-indigo-300">
+                      ±{prediction.prediction_interval.half_width_kg_ha} kg/ha
+                    </span>
+                  </div>
+                  <div className="mt-1 flex items-baseline gap-1.5 text-base font-bold text-slate-900 dark:text-white">
+                    <span>{prediction.prediction_interval.lower_bound_kg_ha}</span>
+                    <span className="text-xs font-normal text-slate-500">to</span>
+                    <span>{prediction.prediction_interval.upper_bound_kg_ha}</span>
+                    <span className="text-xs font-normal text-slate-500">kg/ha</span>
+                  </div>
+                  <p className="mt-1.5 text-[10.5px] leading-relaxed text-slate-500 dark:text-slate-400">
+                    {prediction.prediction_interval.disclaimer}
+                  </p>
+                  {prediction.prediction_interval.coverage_warnings?.length > 0 && (
+                    <div className="mt-2 space-y-1.5">
+                      {prediction.prediction_interval.coverage_warnings.map((warn, wIdx) => (
+                        <div key={wIdx} className="flex items-start gap-1.5 rounded border border-amber-300 bg-amber-50 px-2 py-1 text-[11px] text-amber-900 dark:border-amber-700/50 dark:bg-amber-950/40 dark:text-amber-200">
+                          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-600 dark:text-amber-400" />
+                          <span>{warn}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+
+              <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                {prediction.satellite_features_used ? (
+                  <span className="inline-flex items-center gap-1 rounded bg-cyan-100 px-2 py-0.5 font-mono text-[10px] font-bold text-cyan-800 dark:bg-cyan-900/60 dark:text-cyan-200">
+                    NASA SMAP L4 Active
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 rounded bg-emerald-100 px-2 py-0.5 font-mono text-[10px] font-bold text-emerald-800 dark:bg-emerald-900/60 dark:text-emerald-200">
+                    Canonical Weather & Lags
+                  </span>
+                )}
+                <span className="inline-flex items-center gap-1 rounded border border-slate-200 bg-white px-2 py-0.5 font-mono text-[10px] text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                  {prediction.model_name || prediction.model_version}
+                </span>
+              </div>
+
 
               <button
                 type="button"
@@ -602,6 +669,17 @@ export default function CottonYieldPage({
               />
 
               <MetricRow
+                label="Model Version"
+                value={prediction.model_version || 'production'}
+              />
+
+              <MetricRow
+                label="Satellite Moisture"
+                value={prediction.satellite_features_used ? 'NASA SMAP Active' : 'None (Canonical)'}
+                valueClass={prediction.satellite_features_used ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-900 dark:text-white'}
+              />
+
+              <MetricRow
                 label="Prediction year"
                 value={year}
               />
@@ -634,86 +712,13 @@ export default function CottonYieldPage({
           <div className="space-y-5 lg:col-span-8">
 
 
-            {/* SHAP */}
-
-            <div className="agri-card space-y-4 border border-slate-200 p-5 dark:border-slate-700">
-
-              <div className="flex items-center gap-2">
-
-                <Sparkles className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
-
-                <h2 className="font-bold text-slate-900 dark:text-white">
-
-                  Why did the model produce this estimate?
-
-                </h2>
-
-              </div>
-
-
-              <p className="text-xs text-slate-600 dark:text-slate-300">
-
-                {explanation?.summary_text ||
-                  'SHAP explanation unavailable.'}
-
-              </p>
-
-
-              <div className="grid gap-5 md:grid-cols-2">
-
-
-                {/* Increasing */}
-
-                <div className="space-y-3">
-
-                  <h3 className="flex items-center gap-1 text-xs font-bold text-emerald-800 dark:text-emerald-300">
-
-                    <ArrowUpRight className="h-4 w-4" />
-
-                    Increasing factors
-
-                  </h3>
-
-
-                  {(explanation?.increasing_factors || []).map(
-                    (x) => (
-                      <ContributionBar
-                        key={x.feature}
-                        item={x}
-                      />
-                    )
-                  )}
-
-                </div>
-
-
-                {/* Decreasing */}
-
-                <div className="space-y-3">
-
-                  <h3 className="flex items-center gap-1 text-xs font-bold text-rose-700 dark:text-rose-400">
-
-                    <ArrowDownRight className="h-4 w-4" />
-
-                    Decreasing factors
-
-                  </h3>
-
-
-                  {(explanation?.decreasing_factors || []).map(
-                    (x) => (
-                      <ContributionBar
-                        key={x.feature}
-                        item={x}
-                      />
-                    )
-                  )}
-
-                </div>
-
-              </div>
-
-            </div>
+            {/* Why This Prediction? — Explainable AI (XAI) Component */}
+            <WhyThisPrediction
+              prediction={prediction}
+              loading={isPredicting}
+              district={district}
+              year={year}
+            />
 
 
             {/* Validation */}
@@ -921,6 +926,42 @@ export default function CottonYieldPage({
                     Currently verified model-ready
                     historical years: 1997–2024.
 
+                  </p>
+
+                </div>
+
+
+                {/* Model Version Architecture Selector */}
+                <div>
+
+                  <label className="mb-1.5 block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                    Model Architecture
+                  </label>
+
+                  <select
+                    value={selectedModelVersion}
+                    onChange={(e) => setSelectedModelVersion(e.target.value)}
+                    className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
+                  >
+                    <option value="candidate_six_district_thermal">
+                      Six-District Thermal Ridge (UI Default)
+                    </option>
+                    <option value="candidate_six_district_dar_deficit_heat_thresh">
+                      DAR + Deficit + Heat Thresh (Phase 2 Best Candidate)
+                    </option>
+                    <option value="candidate_six_district_decoupled_agronomic">
+                      Decoupled Agronomic Ridge (Phase 1 Benchmark)
+                    </option>
+                    <option value="candidate_six_district_physiological">
+                      Six-District Physiological Ridge
+                    </option>
+                    <option value="production">
+                      Original 7-District Baseline (GradientBoosting)
+                    </option>
+                  </select>
+
+                  <p className="mt-1 text-[10px] text-slate-400 dark:text-slate-500">
+                    Six-District Thermal Ridge remains the active UI default.
                   </p>
 
                 </div>
@@ -1299,6 +1340,104 @@ export default function CottonYieldPage({
                 </div>
 
 
+                {/* Prediction Model Review Card */}
+                {(() => {
+                  const modelMetaMap = {
+                    candidate_six_district_thermal: {
+                      title: 'Prediction Model: Six-District Thermal Ridge',
+                      subtitle: 'Active UI Default; chronological CV MAE 104.75 kg/ha.',
+                      badge: 'Operational Default',
+                      badgeClass: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+                      mae: '104.75 kg/ha',
+                      rmseWape: '138.10 kg/ha · 32.3%',
+                      regime: 'Thermal + 3yr Rolling',
+                    },
+                    candidate_six_district_dar_deficit_heat_thresh: {
+                      title: 'Prediction Model: DAR + Deficit + Heat Threshold',
+                      subtitle: 'Phase 2 Best Candidate; chronological CV MAE 102.60 kg/ha.',
+                      badge: 'Phase 2 Best Candidate',
+                      badgeClass: 'bg-purple-50 text-purple-800 border-purple-200',
+                      mae: '102.60 kg/ha',
+                      rmseWape: '135.99 kg/ha · 31.8%',
+                      regime: 'DAR + Deficit + Heat',
+                    },
+                    candidate_six_district_decoupled_agronomic: {
+                      title: 'Prediction Model: Decoupled Agronomic Ridge',
+                      subtitle: 'Phase 1 Benchmark Candidate; chronological CV MAE 104.03 kg/ha.',
+                      badge: 'Phase 1 Candidate',
+                      badgeClass: 'bg-blue-50 text-blue-800 border-blue-200',
+                      mae: '104.03 kg/ha',
+                      rmseWape: '137.31 kg/ha · 32.1%',
+                      regime: 'Decoupled Anchor + Wetness',
+                    },
+                    candidate_six_district_physiological: {
+                      title: 'Prediction Model: Six-District Physiological Ridge',
+                      subtitle: 'Physiological interaction candidate; CV MAE 105.10 kg/ha.',
+                      badge: 'Candidate',
+                      badgeClass: 'bg-amber-50 text-amber-800 border-amber-200',
+                      mae: '105.10 kg/ha',
+                      rmseWape: '138.80 kg/ha · 32.5%',
+                      regime: '9 Physiological Interactions',
+                    },
+                    production: {
+                      title: 'Prediction Model: 7-District GradientBoosting',
+                      subtitle: 'Authoritative 1997-2023 validated baseline pipeline.',
+                      badge: '7-District Baseline',
+                      badgeClass: 'bg-slate-100 text-slate-800 border-slate-300',
+                      mae: '119.84 kg/ha (2024 Holdout)',
+                      rmseWape: '138.57 kg/ha · 34.0%',
+                      regime: 'Canonical 36 Features',
+                    },
+                  };
+                  const activeMeta = modelMetaMap[selectedModelVersion] || modelMetaMap.candidate_six_district_thermal;
+
+                  return (
+                    <div className="space-y-3 rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900 shadow-xs">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 border-b border-slate-100 dark:border-slate-800 pb-2.5">
+                        <div>
+                          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
+                            {activeMeta.title}
+                          </h3>
+                          <p className="mt-0.5 text-[11px] text-slate-500 dark:text-slate-400">
+                            {activeMeta.subtitle}
+                          </p>
+                        </div>
+                        <span className={`self-start sm:self-auto rounded-full px-2.5 py-0.5 font-mono text-[10px] font-bold border ${activeMeta.badgeClass}`}>
+                          {activeMeta.badge}
+                        </span>
+                      </div>
+
+                      <div className="space-y-2.5 pt-1 text-xs">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 font-mono text-[11px]">
+                          <div className="rounded-md border border-slate-100 bg-slate-50/70 p-2.5 dark:border-slate-800 dark:bg-slate-800/50">
+                            <span className="block text-[10px] text-slate-400 uppercase font-sans">Validation MAE</span>
+                            <span className="font-bold text-slate-800 dark:text-slate-200">{activeMeta.mae}</span>
+                          </div>
+                          <div className="rounded-md border border-slate-100 bg-slate-50/70 p-2.5 dark:border-slate-800 dark:bg-slate-800/50">
+                            <span className="block text-[10px] text-slate-400 uppercase font-sans">RMSE & WAPE</span>
+                            <span className="font-bold text-slate-800 dark:text-slate-200">{activeMeta.rmseWape}</span>
+                          </div>
+                          <div className="rounded-md border border-slate-100 bg-slate-50/70 p-2.5 dark:border-slate-800 dark:bg-slate-800/50">
+                            <span className="block text-[10px] text-slate-400 uppercase font-sans">Feature Regime</span>
+                            <span className="font-bold text-slate-800 dark:text-slate-200">{activeMeta.regime}</span>
+                          </div>
+                        </div>
+
+                        <div className="rounded-md border border-amber-200/80 bg-amber-50/60 p-2.5 text-[11px] leading-relaxed text-amber-900 dark:border-amber-900/50 dark:bg-amber-950/30 dark:text-amber-200">
+                          <strong>Experimental Status & Limitations:</strong> Evaluated using expanding-window chronological cross-validation across the six target Vidarbha districts. Like all regression models on coarse seasonal weather aggregates, bumper harvest years (&gt; 408 kg/ha) may experience yield underprediction due to unobserved sub-seasonal pest and bolling micro-factors. Output is an empirical estimate, not a guaranteed forecast.
+                        </div>
+                      </div>
+
+                      {!VIDARBHA_DISTRICTS.includes(district) && (
+                        <div className="rounded-md border border-rose-300 bg-rose-50 p-3 text-[11px] text-rose-800 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-200">
+                          <strong>District Scope Notice:</strong> Please select one of the supported six Vidarbha districts: <strong>{VIDARBHA_DISTRICTS.join(', ')}</strong>.
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+
                 <div className="rounded-md border border-blue-200 bg-blue-50 p-3 text-[11px] leading-relaxed text-blue-800 dark:border-blue-800 dark:bg-blue-950/30 dark:text-blue-200">
 
                   <strong>Important:</strong>{' '}
@@ -1323,8 +1462,8 @@ export default function CottonYieldPage({
                   <button
                     type="button"
                     onClick={handlePredict}
-                    disabled={isPredicting}
-                    className="flex w-2/3 items-center justify-center gap-2 rounded-md bg-emerald-600 py-3 text-xs font-semibold text-white hover:bg-emerald-500 disabled:bg-emerald-300 dark:disabled:bg-emerald-900"
+                    disabled={isPredicting || !VIDARBHA_DISTRICTS.includes(district)}
+                    className="flex w-2/3 items-center justify-center gap-2 rounded-md bg-emerald-600 py-3 text-xs font-semibold text-white hover:bg-emerald-500 disabled:bg-slate-400 dark:disabled:bg-slate-700"
                   >
 
                     {isPredicting ? (
@@ -1332,6 +1471,12 @@ export default function CottonYieldPage({
                       <>
                         <RefreshCw className="h-4 w-4 animate-spin" />
                         Predicting…
+                      </>
+
+                    ) : !VIDARBHA_DISTRICTS.includes(district) ? (
+
+                      <>
+                        Select Supported District
                       </>
 
                     ) : (
@@ -1397,7 +1542,7 @@ export default function CottonYieldPage({
                 </li>
 
                 <li>
-                  ✓ The existing validated GradientBoosting model and SHAP explanation are reused.
+                  ✓ Six-District Thermal Ridge model with closed-form SHAP feature attributions.
                 </li>
 
               </ul>

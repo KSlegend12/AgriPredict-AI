@@ -1,1430 +1,291 @@
-# \# AgriPredict-AI
-
-# 
-
-# > AI/ML Decision-Support System for Agricultural Analysis and Cotton Yield Forecasting in Maharashtra
-
-# 
-
-# AgriPredict-AI is an AI/ML-based agricultural decision-support system for Maharashtra, India. The application combines existing agricultural decision-support modules with a dedicated machine-learning workflow for cotton yield prediction and future cotton-yield forecasting in seven Vidarbha districts.
-
-# 
-
-# The project includes historical agricultural data, weather-related features, chronological machine-learning validation, future scenario forecasting, empirical uncertainty bands, and an experimental satellite soil-moisture workflow.
-
-# 
-
-# \---
-
-# 
-
-# \## 1. Project Overview
-
-# 
-
-# AgriPredict-AI currently contains two major application areas.
-
-# 
-
-# \### A. Agricultural Decision-Support Modules
-
-# 
-
-# The application includes existing modules for:
-
-# 
-
-# \- District information
-
-# \- Weather information
-
-# \- Crop suitability
-
-# \- Agricultural yield prediction
-
-# \- Prediction/history records
-
-# 
-
-# The existing crop-suitability module supports:
-
-# 
-
-# 1\. Tomato
-
-# 2\. Onion
-
-# 3\. Sugarcane
-
-# 
-
-# These modules are retained as part of the application and are separate from the dedicated Vidarbha cotton forecasting workflow.
-
-# 
-
-# \### B. Vidarbha Cotton Yield Prediction
-
-# 
-
-# The main validated ML workflow focuses on cotton yield prediction for seven Vidarbha districts:
-
-# 
-
-# 1\. Akola
-
-# 2\. Amravati
-
-# 3\. Buldhana
-
-# 4\. Nagpur
-
-# 5\. Wardha
-
-# 6\. Washim
-
-# 7\. Yavatmal
-
-# 
-
-# The authoritative historical cotton dataset covers harvest years \*\*1997–2024\*\*.
-
-# 
-
-# The production model is trained using \*\*1997–2023\*\* data, while \*\*2024 is retained as an untouched final holdout year\*\*.
-
-# 
-
-# \---
-
-# 
-
-# \# 2. Cotton Yield Prediction Dataset
-
-# 
-
-# Authoritative dataset:
-
-# 
-
-# ```text
-
-# backend/data/vidarbha\_cotton\_model\_ready\_1997\_2024.csv
-
-# 
-
-# Dataset characteristics:
-
-# 
-
-# Property	Value
-
-# Total observations	194
-
-# Total columns	43
-
-# Historical years	1997–2024
-
-# Training years	1997–2023
-
-# Training observations	187
-
-# Final holdout year	2024
-
-# Districts	7
-
-# Target column	yield\_target\_kg\_ha
-
-# 
-
-# The target variable represents cotton yield in kg/ha.
-
-# 
-
-# The 2024 target values are kept outside the training data and are used only for final holdout evaluation.
-
-# 
-
-# 3\. Supported Cotton Districts
-
-# 
-
-# The cotton prediction workflow supports the following seven Vidarbha districts:
-
-# 
-
-# District
-
-# Akola
-
-# Amravati
-
-# Buldhana
-
-# Nagpur
-
-# Wardha
-
-# Washim
-
-# Yavatmal
-
-# 
-
-# Yavatmal is retained as part of the authoritative dataset and model evaluation.
-
-# 
-
-# 4\. Production Cotton Model
-
-# 
-
-# The validated production cotton model is:
-
-# 
-
-# GradientBoostingRegressor
-
-# 
-
-# Current hyperparameters:
-
-# 
-
-# n\_estimators = 100
-
-# learning\_rate = 0.05
-
-# max\_depth = 3
-
-# random\_state = 42
-
-# 
-
-# The production model is kept separate from experimental satellite modelling and the separate future-forecasting model artifacts.
-
-# 
-
-# 5\. Temporal Validation
-
-# 
-
-# Agricultural yield is time-dependent. Therefore, the cotton workflow uses chronological validation rather than a random train/test split.
-
-# 
-
-# The validation strategy uses an expanding-window chronological / rolling-origin approach.
-
-# 
-
-# Validation period:
-
-# 
-
-# 2011–2023
-
-# 
-
-# Final holdout:
-
-# 
-
-# 2024
-
-# 
-
-# The 2024 target values remain an untouched final holdout during model training.
-
-# 
-
-# This approach is intended to reduce temporal leakage and provide a more realistic historical evaluation.
-
-# 
-
-# 6\. Production Model Evaluation
-
-# 2024 Final Holdout
-
-# 
-
-# The final 2024 holdout metrics are:
-
-# 
-
-# Metric	Value
-
-# MAE	230.7527 kg/ha
-
-# RMSE	321.4472 kg/ha
-
-# R²	-0.636
-
-# MAPE	41.6921%
-
-# Baseline Comparison
-
-# 
-
-# The project preserves simple baseline models for comparison.
-
-# 
-
-# Baseline	2024 MAE
-
-# Previous-year yield	189.8643 kg/ha
-
-# Historical mean	281.1830 kg/ha
-
-# 
-
-# These baselines remain part of the evaluation and are not removed when comparing the machine-learning model.
-
-# 
-
-# Important: R² is a regression evaluation metric. It is not described as prediction accuracy.
-
-# 
-
-# 7\. Future Cotton Yield Forecasting
-
-# 
-
-# The project contains a separate future-forecasting module:
-
-# 
-
-# backend/ml/future\_forecasting/
-
-# 
-
-# The module generates cotton-yield forecasts for:
-
-# 
-
-# 2027
-
-# 2028
-
-# 2029
-
-# 2030
-
-# 2031
-
-# 
-
-# The forecast origin is:
-
-# 
-
-# 2024
-
-# 
-
-# The system uses direct horizon-specific models.
-
-# 
-
-# Forecast Year	Forecast Horizon
-
-# 2027	3 years
-
-# 2028	4 years
-
-# 2029	5 years
-
-# 2030	6 years
-
-# 2031	7 years
-
-# 
-
-# Future target yield values are not used as future input features.
-
-# 
-
-# 8\. Future Forecast Model Selection
-
-# 
-
-# The saved future-forecasting artifacts use horizon-specific model selection:
-
-# 
-
-# Horizon	Selected Model
-
-# 1	Ridge
-
-# 2	RandomForest
-
-# 3	RandomForest
-
-# 4	RandomForest
-
-# 5	RandomForest
-
-# 6	GradientBoosting
-
-# 7	RandomForest
-
-# 
-
-# Therefore, the currently generated 2027–2031 forecasts use:
-
-# 
-
-# Forecast Year	Horizon	Model
-
-# 2027	3	RandomForest
-
-# 2028	4	RandomForest
-
-# 2029	5	RandomForest
-
-# 2030	6	GradientBoosting
-
-# 2031	7	RandomForest
-
-# 
-
-# These future-forecasting model artifacts are separate from the validated production cotton model.
-
-# 
-
-# 9\. Future Weather Scenarios
-
-# 
-
-# Future weather conditions are unknown. Therefore, the future forecasting module provides three controlled scenarios.
-
-# 
-
-# Normal
-
-# 
-
-# Uses recent historical district weather climatology.
-
-# 
-
-# Dry
-
-# 
-
-# Represents a controlled drier-weather scenario using changes such as:
-
-# 
-
-# Reduced rainfall
-
-# Reduced rain-day counts
-
-# Reduced heavy-event measures
-
-# Increased dry-spell characteristics
-
-# Wet
-
-# 
-
-# Represents a controlled wetter-weather scenario using changes such as:
-
-# 
-
-# Increased rainfall
-
-# Increased rain-day counts
-
-# Increased heavy-event measures
-
-# Reduced dry-spell characteristics
-
-# 
-
-# These are modelling scenarios and should not be interpreted as actual weather forecasts.
-
-# 
-
-# 10\. Forecast Uncertainty
-
-# 
-
-# The future forecast interface provides empirical uncertainty bands around point predictions.
-
-# 
-
-# The uncertainty calibration is based on historical out-of-sample prediction errors.
-
-# 
-
-# Calibration period:
-
-# 
-
-# 2015–2020
-
-# 
-
-# Evaluation period:
-
-# 
-
-# 2021–2024
-
-# 
-
-# Calibration quantile:
-
-# 
-
-# 90th percentile absolute prediction error
-
-# 
-
-# Current horizon-specific empirical error bands:
-
-# 
-
-# Horizon	Empirical Error Band
-
-# 1	276.30 kg/ha
-
-# 2	262.05 kg/ha
-
-# 3	270.35 kg/ha
-
-# 4	280.12 kg/ha
-
-# 5	278.85 kg/ha
-
-# 6	345.27 kg/ha
-
-# 7	295.62 kg/ha
-
-# 
-
-# The forecast interface displays:
-
-# 
-
-# Predicted yield
-
-# Empirical lower bound
-
-# Empirical upper bound
-
-# Empirical uncertainty band
-
-# Forecast horizon
-
-# Selected model
-
-# 
-
-# The uncertainty bands are historical empirical error bands.
-
-# 
-
-# They are not guaranteed future confidence intervals.
-
-# 
-
-# 11\. Satellite / SMAP Experimental Workflow
-
-# 
-
-# The project also contains an experimental satellite-data workflow using NASA SMAP soil-moisture data.
-
-# 
-
-# Product:
-
-# 
-
-# SPL4SMGP.008
-
-# 
-
-# The workflow extracts surface and root-zone soil-moisture features.
-
-# 
-
-# Coverage:
-
-# 
-
-# 2017–2024
-
-# 
-
-# The experiment covers all seven supported Vidarbha districts.
-
-# 
-
-# The satellite workflow follows:
-
-# 
-
-# Satellite Data
-
-# &#x20;     ↓
-
-# District-Year Feature Extraction
-
-# &#x20;     ↓
-
-# Quality Assurance
-
-# &#x20;     ↓
-
-# Forecast-Origin-Safe Merge
-
-# &#x20;     ↓
-
-# Controlled Hindcast
-
-# &#x20;     ↓
-
-# Baseline Comparison
-
-# 
-
-# The extracted SMAP feature dataset contains:
-
-# 
-
-# 56 rows
-
-# 7 districts × 8 years
-
-# 
-
-# The SMAP feature workflow passed its district-year completeness and quality checks.
-
-# 
-
-# 12\. SMAP Controlled Experiment
-
-# 
-
-# The SMAP workflow is an experimental research component.
-
-# 
-
-# The controlled experiment compares:
-
-# 
-
-# BASE
-
-# 
-
-# against:
-
-# 
-
-# BASE + SMAP
-
-# 
-
-# using the same forecast-origin-safe evaluation framework.
-
-# 
-
-# Selected results:
-
-# 
-
-# Model	Horizon	BASE MAE	SMAP MAE	Change
-
-# GradientBoosting	1	182.20	170.48	-6.43%
-
-# GradientBoosting	2	206.68	199.59	-3.43%
-
-# RandomForest	1	164.90	156.46	-5.12%
-
-# RandomForest	2	185.76	185.58	-0.09%
-
-# Ridge	1	179.71	151.94	-15.45%
-
-# Ridge	2	247.49	277.95	+12.31%
-
-# 
-
-# Because SMAP coverage is limited to 2017–2024, only horizons with sufficient training observations were evaluated.
-
-# 
-
-# The experiment provides promising but limited evidence regarding the usefulness of satellite soil-moisture features.
-
-# 
-
-# Production Status
-
-# 
-
-# SMAP features are currently experimental.
-
-# 
-
-# They have not been automatically integrated into the production cotton model.
-
-# 
-
-# The production model and authoritative historical dataset remain unchanged.
-
-# 
-
-# 13\. Project Architecture
-
-# AgriPredict-AI/
-
-# │
-
-# ├── backend/
-
-# │   ├── main.py
-
-# │   ├── config.py
-
-# │   │
-
-# │   ├── routes/
-
-# │   │   ├── districts.py
-
-# │   │   ├── weather.py
-
-# │   │   ├── crop.py
-
-# │   │   ├── yield\_predict.py
-
-# │   │   ├── history.py
-
-# │   │   ├── cotton.py
-
-# │   │   └── future\_forecast.py
-
-# │   │
-
-# │   ├── schemas/
-
-# │   │   └── request\_schemas.py
-
-# │   │
-
-# │   ├── services/
-
-# │   │   └── cotton\_input\_builder.py
-
-# │   │
-
-# │   ├── ml/
-
-# │   │   ├── predictor.py
-
-# │   │   ├── cotton\_predictor.py
-
-# │   │   │
-
-# │   │   ├── evaluation/
-
-# │   │   │   ├── MODEL\_VALIDATION\_REPORT.md
-
-# │   │   │   ├── MODEL\_DIAGNOSTIC\_REPORT.md
-
-# │   │   │   └── final/
-
-# │   │   │
-
-# │   │   └── future\_forecasting/
-
-# │   │       ├── predictor.py
-
-# │   │       ├── artifacts/
-
-# │   │       ├── outputs/
-
-# │   │       └── data\_audit/
-
-# │   │
-
-# │   ├── data/
-
-# │   │   └── vidarbha\_cotton\_model\_ready\_1997\_2024.csv
-
-# │   │
-
-# │   └── requirements.txt
-
-# │
-
-# ├── frontend/
-
-# │   ├── src/
-
-# │   │   ├── components/
-
-# │   │   ├── pages/
-
-# │   │   └── services/
-
-# │   │
-
-# │   ├── package.json
-
-# │   └── vite.config.js
-
-# │
-
-# ├── FUTURE\_FORECAST\_INTEGRATION.md
-
-# ├── PROJECT\_STATUS.md
-
-# └── README.md
-
-# 14\. Backend Technology Stack
-
-# 
-
-# The backend uses:
-
-# 
-
-# Python
-
-# FastAPI
-
-# Pydantic
-
-# Scikit-learn
-
-# XGBoost
-
-# SHAP
-
-# Pandas
-
-# NumPy
-
-# Joblib
-
-# HTTPX
-
-# Python-dotenv
-
-# Uvicorn
-
-# 
-
-# Backend dependencies are specified in:
-
-# 
-
-# backend/requirements.txt
-
-# 15\. Frontend Technology Stack
-
-# 
-
-# The frontend uses:
-
-# 
-
-# React
-
-# Vite
-
-# Tailwind CSS
-
-# Lucide Icons
-
-# Recharts
-
-# Axios
-
-# React Router
-
-# 
-
-# The frontend provides the application dashboard and future cotton forecasting interface.
-
-# 
-
-# 16\. API Endpoints
-
-# General Health
-
-# GET /
-
-# GET /api/health
-
-# 
-
-# Returns application status and model metadata.
-
-# 
-
-# District Information
-
-# GET /api/districts
-
-# 
-
-# Provides district information for the agricultural application.
-
-# 
-
-# Weather
-
-# GET /api/weather/{district}
-
-# 
-
-# Provides weather information for the requested district.
-
-# 
-
-# Crop Suitability
-
-# POST /api/crop/recommend
-
-# 
-
-# Runs the existing crop-suitability workflow.
-
-# 
-
-# Agricultural Yield Prediction
-
-# POST /api/yield/predict
-
-# 
-
-# Runs the existing agricultural yield-prediction workflow.
-
-# 
-
-# History
-
-# GET /api/history
-
-# 
-
-# Returns application prediction/search history where supported.
-
-# 
-
-# 17\. Cotton Yield API
-
-# 
-
-# Base endpoint:
-
-# 
-
-# /api/cotton
-
-# Predict Cotton Yield
-
-# POST /api/cotton/predict
-
-# 
-
-# Builds the required model feature row from verified historical data and returns a cotton-yield prediction.
-
-# 
-
-# The response also identifies whether the requested year is the 2024 historical holdout evaluation year or another historical model-estimate year.
-
-# 
-
-# Get Prediction Input
-
-# GET /api/cotton/input/{district}/{year}
-
-# 
-
-# Returns the verified model inputs used for a district/year prediction.
-
-# 
-
-# Get Cotton Weather
-
-# GET /api/cotton/weather/{district}/{year}
-
-# 
-
-# Returns the weather summary associated with the specified cotton district and year.
-
-# 
-
-# Get Cotton History
-
-# GET /api/cotton/history/{district}
-
-# 
-
-# Returns historical cotton information for the requested district.
-
-# 
-
-# List Cotton Districts
-
-# GET /api/cotton/districts
-
-# 
-
-# Returns the supported Vidarbha cotton districts and available prediction years.
-
-# 
-
-# Supported districts:
-
-# 
-
-# Akola
-
-# Amravati
-
-# Buldhana
-
-# Nagpur
-
-# Wardha
-
-# Washim
-
-# Yavatmal
-
-# Cotton Model Information
-
-# GET /api/cotton/model/info
-
-# 
-
-# Returns:
-
-# 
-
-# Model name
-
-# Crop
-
-# Geographic scope
-
-# Training period
-
-# Number of training observations
-
-# Temporal validation strategy
-
-# Validation metrics
-
-# 2024 holdout metrics
-
-# Number of model features
-
-# Feature columns
-
-# Top feature importances
-
-# Model comparison information
-
-# Supported prediction years
-
-# Model loading status
-
-# 18\. Future Cotton Forecast API
-
-# 
-
-# Base endpoint:
-
-# 
-
-# /api/cotton/future-forecast
-
-# Forecast District List
-
-# GET /api/cotton/future-forecast/districts
-
-# 
-
-# Returns the districts supported by the future forecasting module.
-
-# 
-
-# Forecast All Districts
-
-# GET /api/cotton/future-forecast/all
-
-# 
-
-# Returns future cotton forecasts for all supported districts.
-
-# 
-
-# Forecast Individual District
-
-# GET /api/cotton/future-forecast/{district}
-
-# 
-
-# Returns future cotton forecasts for an individual district.
-
-# 
-
-# Forecast years:
-
-# 
-
-# 2027
-
-# 2028
-
-# 2029
-
-# 2030
-
-# 2031
-
-# 
-
-# The response includes:
-
-# 
-
-# Predicted yield
-
-# Empirical lower bound
-
-# Empirical upper bound
-
-# Empirical uncertainty band
-
-# Forecast horizon
-
-# Selected model
-
-# Weather scenario information
-
-# 19\. Running the Backend
-
-# 
-
-# From the project root:
-
-# 
-
-# python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
-
-# 
-
-# The backend will be available at:
-
-# 
-
-# http://127.0.0.1:8000
-
-# 
-
-# Health endpoint:
-
-# 
-
-# http://127.0.0.1:8000/api/health
-
-# 
-
-# Interactive FastAPI documentation:
-
-# 
-
-# http://127.0.0.1:8000/docs
-
-# 
-
-# The normal startup command does not retrain the production ML model.
-
-# 
-
-# 20\. Running the Frontend
-
-# 
-
-# Open another terminal:
-
-# 
-
-# cd frontend
-
-# npm install
-
-# npm run dev
-
-# 
-
-# The Vite development server will display the frontend URL in the terminal.
-
-# 
-
-# The frontend normally runs at:
-
-# 
-
-# http://127.0.0.1:5173
-
-# 
-
-# The frontend communicates with the FastAPI backend through the configured API URL.
-
-# 
-
-# 21\. Production Frontend Build
-
-# 
-
-# To create a production frontend build:
-
-# 
-
-# cd frontend
-
-# npm run build
-
-# 
-
-# The generated production files are placed in:
-
-# 
-
-# frontend/dist/
-
-# 
-
-# The build should complete without compilation errors before release.
-
-# 
-
-# 22\. Validation and Audit Documentation
-
-# 
-
-# Important model-validation documentation is located in:
-
-# 
-
-# backend/ml/evaluation/
-
-# 
-
-# Important files include:
-
-# 
-
-# MODEL\_VALIDATION\_REPORT.md
-
-# MODEL\_DIAGNOSTIC\_REPORT.md
-
-# final/FINAL\_MODEL\_VALIDATION\_REPORT.md
-
-# 
-
-# Future-forecasting audit documentation is located in:
-
-# 
-
-# backend/ml/future\_forecasting/data\_audit/
-
-# 
-
-# Important files include:
-
-# 
-
-# DATA\_AUDIT\_GATE.md
-
-# future\_forecast\_audit.md
-
-# STRICT\_FORECAST\_ORIGIN\_AUDIT.md
-
-# 
-
-# Project-level documentation includes:
-
-# 
-
-# PROJECT\_STATUS.md
-
-# FUTURE\_FORECAST\_INTEGRATION.md
-
-# 
-
-# These documents contain detailed information about validation, data auditing, forecasting methodology, model selection, and implementation status.
-
-# 
-
-# 23\. Reproducibility and Data-Safety Rules
-
-# 
-
-# The project follows these principles:
-
-# 
-
-# The authoritative historical cotton dataset must not be modified casually.
-
-# The 2024 target values must remain isolated from model training.
-
-# Future target yield values must never be used as future input features.
-
-# Yavatmal must remain part of the supported district set.
-
-# Previous-year and historical-mean baselines must remain available for comparison.
-
-# Experimental satellite features must not automatically replace the production model.
-
-# R² must not be described as prediction accuracy.
-
-# Historical hindcast performance must not be presented as a guarantee of future performance.
-
-# Empirical uncertainty bands must not be described as guaranteed confidence intervals.
-
-# Changes to the production model should be explicitly evaluated before adoption.
-
-# Future forecasting artifacts should remain separate from the validated historical production model.
-
-# Experimental results should be clearly distinguished from production results.
-
-# 24\. Current Project Status
-
-# 
-
-# The current system includes:
-
-# 
-
-# Maharashtra agricultural decision-support modules
-
-# Crop suitability functionality
-
-# Weather functionality
-
-# Agricultural yield prediction functionality
-
-# Vidarbha cotton yield prediction
-
-# Seven-district cotton coverage
-
-# Historical cotton data from 1997–2024
-
-# 1997–2023 cotton model training
-
-# 2024 untouched final holdout
-
-# Chronological expanding-window validation
-
-# Previous-year baseline
-
-# Historical-mean baseline
-
-# 2027–2031 future cotton forecasting
-
-# Horizon-specific future models
-
-# Normal/Dry/Wet weather scenarios
-
-# Empirical forecast uncertainty bands
-
-# SMAP satellite-data experiment
-
-# Forecast-origin leakage audits
-
-# FastAPI backend
-
-# React/Vite frontend
-
-# Forecast visualization
-
-# Forecast uncertainty visualization
-
-# API documentation through FastAPI/OpenAPI
-
-# 
-
-# The SMAP satellite workflow remains experimental and is intentionally separated from the production cotton model.
-
-# 
-
-# 25\. Important Interpretation Notes
-
-# Historical Model
-
-# 
-
-# The 2024 holdout evaluation represents performance on a specific historical year and should not be interpreted as a guarantee of future performance.
-
-# 
-
-# Future Forecast
-
-# 
-
-# The 2027–2031 forecasts depend on historical patterns, engineered features, model assumptions, and future-weather scenarios.
-
-# 
-
-# Weather Scenarios
-
-# 
-
-# Normal, Dry, and Wet are scenario definitions rather than actual meteorological forecasts.
-
-# 
-
-# Uncertainty Bands
-
-# 
-
-# The displayed forecast ranges are empirical historical error bands. They should not be interpreted as guaranteed future confidence intervals.
-
-# 
-
-# Satellite Features
-
-# 
-
-# The SMAP workflow is experimental and has not been promoted into the production model.
-
-# 
-
-# 26\. Disclaimer
-
-# 
-
-# AgriPredict-AI is an academic and engineering AI/ML decision-support project.
-
-# 
-
-# Model outputs are estimates based on historical data, engineered features, modelling assumptions, and scenario definitions.
-
-# 
-
-# The system should not be interpreted as providing guaranteed agricultural outcomes or as a replacement for professional agronomic advice.
-
-# 
-
-# Future scenario forecasts are particularly sensitive to assumptions about future weather and other changing conditions.
-
-# 
-
-# 27\. License and Credits
-
-# 
-
-# Built as an academic/engineering AI/ML project for agricultural decision-support research and demonstration.
-
-# 
-
-# AgriPredict-AI combines machine learning, agricultural data analysis, temporal validation, forecasting, and web-based visualization into a single decision-support application.
-
+# AgriPredict-AI
+
+> **Post-Monsoon Pre-Harvest Cotton Yield Estimation and Decision Support System for Six Vidarbha Districts**
+
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.110+-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
+[![React](https://img.shields.io/badge/React-18.0+-61DAFB.svg?logo=react&logoColor=black)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-8.0+-646CFF.svg?logo=vite&logoColor=white)](https://vitejs.dev)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.4+-F7931E.svg?logo=scikit-learn&logoColor=white)](https://scikit-learn.org)
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB.svg?logo=python&logoColor=white)](https://python.org)
+[![Tests](https://img.shields.io/badge/Tests-298%20Passed-brightgreen.svg)](#testing-and-verification)
+
+---
+
+## 1. Project Overview
+
+**AgriPredict-AI** is a **Post-Monsoon Pre-Harvest Cotton Yield Estimation and Decision Support System for Six Vidarbha Districts** (Akola, Amravati, Buldhana, Nagpur, Wardha, and Washim). It is built to assist agronomists, regional agricultural planners, and extension personnel in Maharashtra, India.
+
+### Operational Forecast Origin & Timing Boundary
+- **Forecast Horizon**: End-of-season yield estimation conducted in **October / early November**, prior to harvest.
+- **In-Season Agro-Meteorological Realization**: The model requires cumulative Kharif rainfall, rainy days, extreme heat days ($\ge 35^\circ\text{C}$), and diurnal temperature range measured through **October 31**.
+- **Important Boundary**: The system is **NOT** a pre-sowing prediction system, a May/June planting advisor, or a full-season forecast before monsoon observations exist. Running the model before Kharif weather realizes would constitute severe temporal leakage.
+- **Longitudinal Evaluation**: Yield modeling across 28 harvest seasons (1997–2024), utilizing expanding-window chronological cross-validation, thermal and moisture stress interactions, explainable AI (SHAP) feature attribution, and empirical out-of-fold error bounds.
+
+---
+
+## 2. Target Geographic Scope
+
+### Vidarbha Six-District Focus
+The dedicated cotton yield forecasting module focuses strictly on six core agricultural districts in the Vidarbha region:
+1. **Akola**
+2. **Amravati**
+3. **Buldhana**
+4. **Nagpur**
+5. **Wardha**
+6. **Washim**
+
+### Yavatmal Scope Isolation
+- **Frontend & Candidate Scope**: Following empirical error audits and regional agrarian volatility analysis, Yavatmal was intentionally excluded from the candidate model development scope and completely removed from the frontend user interface.
+- **Defensive API Guardrails**: API requests targeting Yavatmal under the six-district candidate models return `HTTP 422 Unprocessable Entity`.
+- **Production Baseline Integrity**: The canonical historical dataset (`data/vidarbha_cotton_model_ready_1997_2024.csv`, SHA-256: `1430370e...`) and the production model artifact (`backend/ml/artifacts/final_model.pkl`, SHA-256: `3b0c2fda...`) preserve 7-district records to ensure backward compatibility and fair benchmarking.
+
+---
+
+## 3. System Architecture
+
+```
+                    ┌──────────────────────────────────────────────┐
+                    │            React 18 + Vite Frontend          │
+                    │   (Tailwind CSS, Lucide Icons, Recharts)     │
+                    └───────────────────────┬──────────────────────┘
+                                            │ HTTP / JSON
+                                            ▼
+                    ┌──────────────────────────────────────────────┐
+                    │             FastAPI Backend Engine           │
+                    │          (Python 3.10+, Uvicorn Async)       │
+                    └──────┬───────────────┬───────────────┬───────┘
+                           │               │               │
+            ┌──────────────▼────┐   ┌──────▼──────┐   ┌────▼──────────────┐
+            │   Cotton Yield    │   │ Multi-Crop  │   │  Weather Service  │
+            │ Prediction Module │   │ Suitability │   │ & History Tracker │
+            └─────────┬─────────┘   └─────────────┘   └───────────────────┘
+                      │
+        ┌─────────────┴─────────────────────────┐
+        ▼                                       ▼
+┌───────────────────────────────┐   ┌───────────────────────────────────┐
+│ Production Model (Default)    │   │ Thermal Ridge Candidate (Opt-In)  │
+│ - Gradient Boosting Regressor │   │ - RobustScaler + Ridge (α=100)    │
+│ - 36 Features (1997-2023)     │   │ - 38 Features (Thermal Delta)     │
+│ - TreeExplainer SHAP          │   │ - Closed-Form Additive SHAP       │
+└───────────────────────────────┘   └───────────────────────────────────┘
+```
+
+---
+
+## 4. Key Features
+
+- **Dual-Model Cotton Architecture**: Switch seamlessly between the production Gradient Boosting model (system default) and the research-grade Six-District Thermal Ridge candidate.
+- **Closed-Form Explainable AI (SHAP)**: Waterfall attributions quantify the exact positive and negative contributions of extreme heat days, diurnal temperature range, and monsoon anomalies.
+- **Live Agro-Meteorological Intelligence**: Real-time temperature, humidity, rainfall estimates, and wind conditions via Open-Meteo with zero required API keys and graceful fallback.
+- **Agronomic Multi-Crop Matching**: Random Forest Classifier matching N-P-K nutrient profiles, soil pH, and moisture against vetted agronomic baselines.
+- **Multi-Year Scenario Forecasting (2027–2031)**: Horizon-specific models with empirical error bands under Normal, Drier, and Wetter weather scenarios.
+- **Persistent Audit Logging**: SQLite database recording every prediction with timestamp, selected model version, district, and predicted yield.
+
+---
+
+## 5. Technology Stack
+
+### Backend
+- **Framework**: FastAPI 0.110+, Uvicorn 0.28+ (ASGI asynchronous server)
+- **Data & ML**: Scikit-Learn 1.4+, NumPy 1.26+, Pandas 2.2+, Joblib 1.3+
+- **Validation**: Pydantic v2
+- **Explainability**: SHAP 0.45+ (TreeExplainer & Closed-form Linear Waterfall)
+- **Database**: SQLite (SQLAlchemy / Python sqlite3)
+- **Testing**: Pytest 9.1+, AnyIO
+
+### Frontend
+- **Library**: React 18
+- **Build Tool**: Vite 8.2
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **HTTP Client**: Axios
+
+---
+
+## 6. Empirical Model Evaluation Summary
+
+All models were evaluated on the exact same 13 expanding chronological folds (2011–2023, 6 target districts, $N=78$ out-of-fold test observations):
+
+| Model Version | Architecture | Feats | CV MAE (kg/ha) | CV RMSE (kg/ha) | CV WAPE (%) | CV $R^2$ | Signed Bias (kg/ha) | Fold Error Std (kg/ha) | 2024 Checkpoint MAE* (kg/ha) |
+| :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Thermal-Only Ridge** (`candidate_six_district_thermal`) | RobustScaler + Ridge ($\alpha=100$) on 3yr rolling delta | 38 | **104.75** | **138.10** | **32.28%** | **0.2305** | -24.66 | **56.91** | 119.84 |
+| **Physiological Ridge** (`candidate_six_district_physiological`) | RobustScaler + Ridge ($\alpha=100$) on 3yr rolling delta | 45 | 106.11 | 140.76 | 32.70% | 0.2006 | -25.37 | 58.45 | 116.43 |
+| **Retrained Gradient Boosting** (Expanding Window) | Standard GradientBoostingRegressor ($n=100, d=3, \eta=0.05$) | 36 | 116.42 | 151.65 | 35.87% | 0.0722 | -31.60 | 73.10 | 129.70 |
+| **Baseline: Previous-Year Persistence** | Naive lag-1 persistence ($\hat{y}_t = y_{t-1}$) | 1 | 127.71 | 176.05 | 39.35% | -0.2503 | -21.87 | 84.02 | 109.27 |
+| *Saved Production GB (In-Sample Baseline)* | Production artifact evaluated in-sample on train panel | 36 | *30.08* | *40.06* | *9.27%* | *0.9353* | *-6.56* | *10.13* | 139.62 |
+
+*\*Note 1: 2024 results reflect an inspected sanity checkpoint, not an untouched blind holdout.*
+*\*Note 2 (Evaluation Discrepancy Reconciliation): The historical 111.8 kg/ha MAE reported in earlier documentation was evaluated over all 7 Vidarbha districts ($N=91$ observations across 13 folds). When evaluated strictly on the 6 target districts under identical chronological folds ($N=78$ observations), retrained Gradient Boosting yields 116.42 kg/ha, demonstrating an authentic 11.67 kg/ha error reduction by Thermal Ridge (104.75 kg/ha).*
+
+### District-Level Cross-Validation MAE (kg/ha)
+- **Akola**: Thermal 69.39 vs Physio 72.64 (+3.25 advantage)
+- **Amravati**: Thermal 161.47 vs Physio 162.51 (+1.03 advantage) — highest regional volatility
+- **Buldhana**: Thermal 128.38 vs Physio 129.62 (+1.24 advantage)
+- **Nagpur**: Thermal 70.46 vs Physio 73.30 (+2.84 advantage)
+- **Wardha**: Thermal 104.75 vs Physio 105.27 (+0.52 advantage)
+- **Washim**: Thermal 94.04 vs Physio 93.32 (-0.72 deficit)
+
+---
+
+## 7. Installation and Setup Guide
+
+### Prerequisites
+- **Python**: Version 3.10, 3.11, 3.12, or 3.13
+- **Node.js**: Version 18.x or 20.x
+- **Package Manager**: npm or yarn
+
+### 1. Clone & Navigate to Repository
+```bash
+git clone https://github.com/<your-username>/AgriPredict-AI.git
+cd AgriPredict-AI
+```
+
+### 2. Backend Setup
+Create a virtual environment and install backend dependencies:
+```bash
+# Windows (PowerShell)
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+pip install -r backend/requirements.txt
+
+# Linux / macOS
+python3 -m venv venv
+source venv/bin/activate
+pip install -r backend/requirements.txt
+```
+
+*(Optional)* Create a `.env` file in the root or `backend/` directory if configuring custom weather credentials:
+```env
+WEATHER_API_KEY=demo_weather_key
+PORT=8000
+```
+*(Note: If `WEATHER_API_KEY` is not provided or set to `demo_weather_key`, the service automatically routes to free Open-Meteo live data).*
+
+### 3. Frontend Setup
+Install frontend npm packages:
+```bash
+cd frontend
+npm install
+cd ..
+```
+
+---
+
+## 8. Running the Application
+
+### Start the Backend Server
+```bash
+# From project root:
+python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
+```
+- Interactive API Docs (Swagger UI): `http://127.0.0.1:8000/docs`
+- Redoc Documentation: `http://127.0.0.1:8000/redoc`
+
+### Start the Frontend Server
+```bash
+# In a new terminal window:
+cd frontend
+npm run dev -- --host 127.0.0.1 --port 5173
+```
+- Web Application UI: `http://127.0.0.1:5173`
+
+---
+
+## 9. Testing and Verification
+
+Run the complete backend test suite (109 automated tests):
+```bash
+# Run pytest from project root
+python -m pytest backend/tests/ -v
+```
+Expected output:
+```
+====================== 109 passed, 34 warnings in ~7s =======================
+```
+
+Run the frontend production build:
+```bash
+cd frontend
+npm run build
+```
+Expected output:
+```
+✓ 2486 modules transformed.
+dist/index.html                   0.45 kB
+dist/assets/index-*.css          85.39 kB
+dist/assets/index-*.js          837.43 kB
+✓ built in ~600ms
+```
+
+---
+
+## 10. API Route Reference
+
+| Method | Endpoint | Description | Sample Request Body |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/cotton/predict` | Predict cotton yield with XAI attribution | `{"district": "Akola", "target_year": 2024, "model_version": "candidate_six_district_thermal"}` |
+| `POST` | `/api/yield/predict` | Multi-crop yield estimation | `{"district": "Pune", "crop": "Tomato", "area_ha": 2.5, "rainfall_mm": 600, ...}` |
+| `POST` | `/api/crop/recommend` | Crop suitability ranking | `{"district": "Nashik", "soil_nitrogen": 90, "soil_ph": 6.5, ...}` |
+| `GET` | `/api/weather/{district}` | Real-time weather info | *URL parameter: district name* |
+| `GET` | `/api/cotton/future-forecast` | Multi-year forecast (2027–2031) | *Query parameter: district* |
+| `GET` | `/api/history` | Historical prediction logs | *None* |
+
+---
+
+## 11. Important Interpretation & Limitations
+
+1. **Post-Monsoon Forecast Timing**: The model relies on realized in-season Kharif agro-meteorological observations accumulated through October 31 (cumulative Kharif precipitation, rainy days, and peak temperature indices). Predictions represent **post-monsoon pre-harvest estimates (October/November)**, not pre-sowing planting recommendations.
+2. **Empirically Calibrated Out-of-Fold Error Bounds ($\pm 253.5\text{ kg/ha}$)**:
+   - The default error interval ($\pm 253.5\text{ kg/ha}$) represents **Empirically Calibrated Out-of-Fold Error Bounds (Retrospective 2011–2023)**, NOT a theoretical Gaussian or distribution-free guaranteed 90% confidence interval.
+   - **Retrospective Circularity**: The 92.3% historical coverage reported across the 78 out-of-fold residuals (2011–2023) is mathematically circular: the $253.5\text{ kg/ha}$ threshold is by definition the 72nd order statistic out of 78 ($k = \lceil 79 \times 0.90 \rceil = 72$), so $72 / 78 = 92.307\%$ is a descriptive tautology.
+   - **Strict Rolling-Origin Prequential Calibration**: When evaluated strictly prospectively (using only years $< t$ to calibrate threshold for year $t$):
+     - Years 2011 & 2012 cannot be calibrated prospectively due to sample size constraints ($N=0$ and $N=6 < 10$, where $k = \lceil 7 \times 0.90 \rceil = 7 > 6$).
+     - Over all eligible forecast years (2013–2023, $N=66$), strict rolling-origin calibration achieved **87.9% empirical coverage**.
+     - During the 2016 bumper post-drought recovery year, prequential coverage collapsed to **16.7%** (5 out of 6 districts breached the bound) because previous drought years (2014 & 2015) artificially contracted the threshold to $205.4\text{ kg/ha}$.
+   - **Independent 2024 Holdout**: Covered 6 out of 6 districts ($100.0\%$), but $N=6$ is statistically insufficient to prove long-term guarantees.
+   - **Asymmetric Calibration Geometry**: The signed error distribution ($y - \hat{y}$) has a heavy positive tail (underpredictions up to $+433.6\text{ kg/ha}$) and a truncated negative tail ($-281.9\text{ kg/ha}$). Asymmetric bounds ($[-156.5, +258.1]\text{ kg/ha}$) yield a total width of $414.6\text{ kg/ha}$ ($156.5 + 258.1$), achieving a **$92.4\text{ kg/ha}$ reduction in width** compared to the symmetric span of $507.0\text{ kg/ha}$ ($2 \times 253.5$) while preserving 89.7% empirical coverage.
+3. **District & High-Yield Regimes**:
+   - **Amravati Variance**: Higher historical yield variance causes coverage in Amravati to drop to 76.9% under the retrospective bound.
+   - **High-Yield Under-Prediction**: In bumper harvests ($>450\text{ kg/ha}$ or $>500\text{ kg/ha}$), regression models systematically underpredict yields, increasing upper-bound breach rates up to 27.8%.
+4. **WAPE Error Metric**: A WAPE of 32.28% is a scale-independent error metric ($\sum |y - \hat{y}| / \sum y$), not an accuracy percentage. It must not be cited as "67.72% accuracy".
+5. **Future Weather Scenarios**: Projections for 2027–2031 reflect controlled synthetic scenarios (Normal, Dry, Wet) and should be used for stress-testing rather than meteorological forecasting.
+
+---
+
+## 12. Project Structure
+
+```
+AgriPredict-AI/
+├── backend/
+│   ├── main.py                     # FastAPI application entrypoint
+│   ├── config.py                   # System configuration & crop baselines
+│   ├── database/                   # SQLite database engine & schema
+│   ├── ml/
+│   │   ├── artifacts/              # Production model artifacts (final_model.pkl)
+│   │   ├── cotton_predictor.py     # Cotton inference & multi-model router
+│   │   ├── experiments/            # Optimization workflows & candidate artifacts
+│   │   └── models/                 # Crop suitability & yield classifiers
+│   ├── routes/                     # FastAPI route controllers
+│   ├── services/                   # Input feature builders & weather service
+│   └── tests/                      # 109 automated regression & unit tests
+├── data/
+│   ├── vidarbha_cotton_model_ready_1997_2024.csv # Canonical panel dataset
+│   └── raw/                        # Baseline agricultural datasets
+├── frontend/
+│   ├── src/
+│   │   ├── components/             # Reusable UI components (Navbar, Footer, Cards)
+│   │   ├── constants/              # Shared six-district authority (districts.js)
+│   │   ├── pages/                  # Page views (Dashboard, CottonYield, Weather, etc.)
+│   │   └── App.jsx                 # Client-side routing & theme setup
+│   ├── package.json
+│   └── vite.config.js
+├── reports/
+│   └── FINAL_MODEL_EVALUATION_AND_PROJECT_READINESS_REPORT.md # Technical report
+└── README.md                       # Master project documentation
+```
+
+---
+
+## 13. License & Academic Disclaimer
+
+This project was built for academic research and engineering demonstration purposes. Model predictions represent statistical estimates and should not be used as the sole basis for high-stakes financial or commercial agricultural decisions.

@@ -27,17 +27,10 @@ import {
   getCottonFutureForecast,
   getCotton2026ScenarioPrediction,
 } from '../services/api';
+import { SUPPORTED_VIDARBHA_DISTRICTS, sanitizeDistrict } from '../constants/districts';
 
 
-const DISTRICTS = [
-  'Akola',
-  'Amravati',
-  'Buldhana',
-  'Nagpur',
-  'Wardha',
-  'Washim',
-  'Yavatmal',
-];
+const DISTRICTS = SUPPORTED_VIDARBHA_DISTRICTS;
 
 
 const SCENARIOS = {
@@ -76,11 +69,7 @@ export default function FutureCottonForecastPage({
   // STATES
   // =========================================================
 
-  const [district, setDistrict] = useState(
-    DISTRICTS.includes(selectedDistrict)
-      ? selectedDistrict
-      : 'Akola'
-  );
+  const [district, setDistrict] = useState(sanitizeDistrict(selectedDistrict));
 
   const [scenario, setScenario] = useState('normal');
 
@@ -1127,35 +1116,102 @@ export default function FutureCottonForecastPage({
 
 
           {/* =================================================
-              FINAL INTERPRETATION
+              DATA PROVENANCE & OBSERVATION BOUNDARIES
           ================================================= */}
 
-          <section className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 dark:border-emerald-800 dark:bg-emerald-950/30">
+          <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
 
             <div className="flex items-start gap-3">
 
               <Leaf className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600 dark:text-emerald-400" />
 
 
-              <div>
+              <div className="w-full space-y-2">
 
-                <h3 className="font-bold text-emerald-900 dark:text-emerald-200">
+                <h3 className="font-bold text-slate-900 dark:text-slate-100">
 
-                  Forecast interpretation
+                  Data Provenance & Observation Boundaries
 
                 </h3>
 
 
-                <p className="mt-1 text-sm leading-6 text-emerald-800 dark:text-emerald-200">
+                <p className="text-xs leading-5 text-slate-500 dark:text-slate-400">
 
-                  The 2026 point represents an experimental
-                  scenario-based estimate because the actual annual
-                  2026 yield is not available yet. The 2027–2031
-                  values represent the existing future forecast
-                  system. These values are model-based estimates
-                  rather than guaranteed future yields.
+                  AgriPredict-AI strictly distinguishes measured observations from scenario models. Forecast values are estimates, not guaranteed outcomes.
 
                 </p>
+
+
+                <div className="grid gap-3 pt-2 text-xs sm:grid-cols-2">
+
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 dark:border-slate-700 dark:bg-slate-800">
+
+                    <span className="mb-1 block font-bold text-slate-800 dark:text-slate-200">
+
+                      Historical Baseline (1997–2024)
+
+                    </span>
+
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+
+                      Verified district cotton panels with authoritative IMD weather telemetry and historical agricultural yield statistics.
+
+                    </p>
+
+                  </div>
+
+
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 dark:border-slate-700 dark:bg-slate-800">
+
+                    <span className="mb-1 block font-bold text-slate-800 dark:text-slate-200">
+
+                      Satellite Soil Moisture (NASA SMAP)
+
+                    </span>
+
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+
+                      Physical observations (SPL4SMGP.008) verified for 2017–2024 only. Unobserved for 2025–2031 future horizons.
+
+                    </p>
+
+                  </div>
+
+
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 dark:border-slate-700 dark:bg-slate-800">
+
+                    <span className="mb-1 block font-bold text-slate-800 dark:text-slate-200">
+
+                      Forecast Weather (2027–2031)
+
+                    </span>
+
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+
+                      10-year rolling climatology with historical linear temperature trend and scenario multipliers (Normal 1.0x, Dry 0.8x, Wet 1.2x).
+
+                    </p>
+
+                  </div>
+
+
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 dark:border-slate-700 dark:bg-slate-800">
+
+                    <span className="mb-1 block font-bold text-slate-800 dark:text-slate-200">
+
+                      Forecast Origin Safety
+
+                    </span>
+
+                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+
+                      Evaluated using expanding rolling-origin chronological protocol; zero future weather or target leakage into feature representations.
+
+                    </p>
+
+                  </div>
+
+                </div>
 
               </div>
 

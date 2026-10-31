@@ -81,9 +81,11 @@ export const predictCottonYield = async (payload) => {
 };
 
 
-export const getCottonPredictionInput = async (district, year) => {
+export const getCottonPredictionInput = async (district, year, modelVersion = 'candidate_six_district_thermal') => {
   try {
-    const res = await api.get(`/cotton/input/${encodeURIComponent(district)}/${year}`);
+    const res = await api.get(`/cotton/input/${encodeURIComponent(district)}/${year}`, {
+      params: { model_version: modelVersion }
+    });
     return res.data;
   } catch (err) {
     console.error('Cotton prediction input API error:', err);
@@ -131,6 +133,16 @@ export const getCottonModelInfo = async () => {
   }
 };
 
+export const getCottonGlobalXAI = async () => {
+  try {
+    const res = await api.get('/cotton/xai/global');
+    return res.data;
+  } catch (err) {
+    console.warn('Failed to fetch global XAI data:', err);
+    return null;
+  }
+};
+
 
 export const getCottonFutureForecast = async (district) => {
   try {
@@ -138,6 +150,21 @@ export const getCottonFutureForecast = async (district) => {
     return res.data;
   } catch (err) {
     console.error('Cotton future forecast API error:', err);
+    throw err;
+  }
+};
+
+export const getCotton2025ExperimentalPrediction = async (district) => {
+  try {
+    const res = await api.get(
+      `/cotton/future-forecast/2025/${encodeURIComponent(district)}`
+    );
+    return res.data;
+  } catch (err) {
+    console.error(
+      'Cotton 2025 experimental prediction API error:',
+      err
+    );
     throw err;
   }
 };
@@ -164,6 +191,95 @@ export const getCottonFutureForecastDistricts = async () => {
   } catch (err) {
     console.error('Cotton future forecast districts API error:', err);
     throw err;
+  }
+};
+
+// ===========================================================================
+// PHASE 11: FIELD VALIDATION & REAL AGRICULTURAL DATA INTEGRATION
+// ===========================================================================
+
+export const submitSoilTestReport = async (payload) => {
+  try {
+    const res = await api.post('/soil/test-report', payload);
+    return res.data;
+  } catch (err) {
+    console.error('Soil test report API error:', err);
+    throw err;
+  }
+};
+
+export const getSoilTestReports = async (district = null, limit = 50) => {
+  try {
+    const q = district ? `?district=${encodeURIComponent(district)}&limit=${limit}` : `?limit=${limit}`;
+    const res = await api.get(`/soil/test-reports${q}`);
+    return res.data;
+  } catch (err) {
+    console.warn('Failed to fetch soil test reports:', err);
+    return { reports: [] };
+  }
+};
+
+export const submitFieldObservation = async (payload) => {
+  try {
+    const res = await api.post('/field-observations/record', payload);
+    return res.data;
+  } catch (err) {
+    console.error('Field observation submission API error:', err);
+    throw err;
+  }
+};
+
+export const getFieldObservations = async (district = null, crop = null, limit = 50) => {
+  try {
+    const params = new URLSearchParams();
+    if (district) params.append('district', district);
+    if (crop) params.append('crop', crop);
+    params.append('limit', limit);
+    const res = await api.get(`/field-observations?${params.toString()}`);
+    return res.data;
+  } catch (err) {
+    console.warn('Failed to fetch field observations:', err);
+    return { observations: [] };
+  }
+};
+
+export const submitOutcomeComparison = async (payload) => {
+  try {
+    const res = await api.post('/outcomes/compare', payload);
+    return res.data;
+  } catch (err) {
+    console.error('Outcome comparison API error:', err);
+    throw err;
+  }
+};
+
+export const getOutcomeValidationSummary = async () => {
+  try {
+    const res = await api.get('/outcomes/summary');
+    return res.data;
+  } catch (err) {
+    console.warn('Failed to fetch outcome validation summary:', err);
+    return null;
+  }
+};
+
+export const getDistrictTalukas = async (district) => {
+  try {
+    const res = await api.get(`/talukas/${encodeURIComponent(district)}`);
+    return res.data;
+  } catch (err) {
+    console.warn(`Failed to fetch talukas for ${district}:`, err);
+    return { talukas: [] };
+  }
+};
+
+export const getWeatherProvenance = async (district) => {
+  try {
+    const res = await api.get(`/weather-provenance/${encodeURIComponent(district)}`);
+    return res.data;
+  } catch (err) {
+    console.warn(`Failed to fetch weather provenance for ${district}:`, err);
+    return null;
   }
 };
 
