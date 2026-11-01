@@ -80,7 +80,7 @@ export default function Navbar({ selectedDistrict, setSelectedDistrict, isRealMo
 
             <button
               onClick={() => navigate('/cotton')}
-              className="hidden sm:flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-xs font-bold text-white shadow-lg shadow-slate-950/10 hover:bg-emerald-700 transition"
+              className="hidden sm:flex items-center gap-2 rounded-xl bg-[#087A50] hover:bg-[#066341] text-white dark:bg-slate-950 dark:hover:bg-emerald-700 px-4 py-2.5 text-xs font-bold shadow-lg shadow-[#087A50]/20 dark:shadow-slate-950/10 transition"
             >
               <Sparkles className="h-3.5 w-3.5" /> Predict Yield
             </button>

@@ -57,7 +57,7 @@ export default function App() {
 
   return (
     <Router>
-      <div className="app-shell min-h-screen bg-[#f4f8f3] text-slate-900 flex flex-col">
+      <div className="app-shell min-h-screen bg-[#F4F8F5] text-[#183C2C] flex flex-col">
         <Navbar
           selectedDistrict={selectedDistrict}
           setSelectedDistrict={setSelectedDistrict}

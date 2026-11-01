@@ -1324,7 +1324,7 @@ function Quick({
   return (
     <div className="agri-card agri-card-hover p-5">
 
-      <div className="h-10 w-10 rounded-xl bg-slate-950 text-white flex items-center justify-center">
+      <div className="h-10 w-10 rounded-xl bg-[#087A50] dark:bg-slate-950 text-white flex items-center justify-center shadow-md shadow-[#087A50]/20 dark:shadow-none">
 
         <Icon className="h-5 w-5" />
 

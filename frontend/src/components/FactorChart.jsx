@@ -16,19 +16,26 @@ export default function FactorChart({ factorScores }) {
     <div className="w-full h-56 relative">
       <ResponsiveContainer width="100%" height="100%">
         <RadarChart cx="50%" cy="50%" outerRadius="75%" data={data}>
-          <PolarGrid stroke="rgba(255, 255, 255, 0.1)" />
-          <PolarAngleAxis dataKey="factor" tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 600 }} />
+          <PolarGrid stroke="var(--chart-grid, #DCE8DF)" />
+          <PolarAngleAxis dataKey="factor" tick={{ fill: 'var(--chart-axis, #607568)', fontSize: 11, fontWeight: 600 }} />
           <PolarRadiusAxis angle={30} domain={[0, 100]} tick={false} axisLine={false} />
-          <Radar 
-            name="Suitability Factor Score" 
-            dataKey="score" 
-            stroke="#10b981" 
-            fill="#10b981" 
-            fillOpacity={0.4} 
+          <Radar
+            name="Suitability Factor Score"
+            dataKey="score"
+            stroke="#087A50"
+            fill="#087A50"
+            fillOpacity={0.35}
             strokeWidth={2}
           />
-          <Tooltip 
-            contentStyle={{ backgroundColor: '#0f172a', borderColor: '#1e293b', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
+          <Tooltip
+            contentStyle={{
+              backgroundColor: 'var(--chart-tooltip-bg, #FFFFFF)',
+              borderColor: 'var(--chart-tooltip-border, #DCE8DF)',
+              borderRadius: '8px',
+              color: 'var(--chart-tooltip-text, #183C2C)',
+              fontSize: '12px',
+              boxShadow: '0 4px 16px rgba(24, 60, 44, 0.08)'
+            }}
             formatter={(value) => [`${value}% Match`, 'Factor Match']}
           />
         </RadarChart>

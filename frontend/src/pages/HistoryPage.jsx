@@ -118,7 +118,7 @@ export default function HistoryPage() {
       try {
         const summary = await getOutcomeValidationSummary();
         if (isMounted && summary) setValidationSummary(summary);
-        
+
         const obs = await getFieldObservations(selectedDistrict, null, 20);
         if (isMounted && obs && obs.observations) setFieldObservations(obs.observations);
       } catch (err) {
@@ -175,7 +175,7 @@ export default function HistoryPage() {
 
   return (
     <div className="space-y-8 py-4 max-w-7xl mx-auto">
-      
+
       {/* Top Header */}
       <div className="border-b border-slate-200 pb-4">
         <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-emerald-50 text-emerald-800 border border-emerald-200 text-xs font-semibold uppercase tracking-wider mb-1">
@@ -431,7 +431,7 @@ export default function HistoryPage() {
 
       {/* FILTERS BAR (Requirement #23) */}
       <div className="agri-card p-4 border border-slate-200 shadow-xs flex flex-wrap items-center justify-between gap-4">
-        
+
         {/* District Filter */}
         <div className="flex items-center gap-2">
           <MapPin className="w-4 h-4 text-emerald-600" />
@@ -453,7 +453,7 @@ export default function HistoryPage() {
         <div className="flex items-center gap-3 text-xs font-mono">
           <Sliders className="w-4 h-4 text-emerald-600" />
           <span className="font-sans font-semibold text-slate-700">Year Range:</span>
-          
+
           <select
             value={startYear}
             onChange={(e) => setStartYear(Number(e.target.value))}
@@ -492,14 +492,21 @@ export default function HistoryPage() {
         <div className="h-60 w-full pt-1">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={filteredData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="year" stroke="#64748b" fontSize={11} tickLine={false} />
-              <YAxis stroke="#64748b" fontSize={11} tickLine={false} domain={['dataMin - 50', 'dataMax + 50']} unit=" kg" />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid, #DCE8DF)" />
+              <XAxis dataKey="year" stroke="var(--chart-axis, #607568)" fontSize={11} tickLine={false} />
+              <YAxis stroke="var(--chart-axis, #607568)" fontSize={11} tickLine={false} domain={['dataMin - 50', 'dataMax + 50']} unit=" kg" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'var(--chart-tooltip-bg, #FFFFFF)',
+                  borderColor: 'var(--chart-tooltip-border, #DCE8DF)',
+                  borderRadius: '10px',
+                  color: 'var(--chart-tooltip-text, #183C2C)',
+                  fontSize: '12px',
+                  boxShadow: '0 4px 16px rgba(24, 60, 44, 0.08)'
+                }}
                 formatter={(val) => [`${val} kg/ha`, 'Yield']}
               />
-              <Line type="monotone" dataKey="yield" stroke="#059669" strokeWidth={2.5} dot={{ fill: '#059669', r: 4 }} />
+              <Line type="monotone" dataKey="yield" stroke="#087A50" strokeWidth={2.5} dot={{ fill: '#087A50', r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -518,11 +525,18 @@ export default function HistoryPage() {
         <div className="h-60 w-full pt-1">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={filteredData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="year" stroke="#64748b" fontSize={11} tickLine={false} />
-              <YAxis stroke="#64748b" fontSize={11} tickLine={false} domain={['dataMin - 100', 'dataMax + 100']} unit=" mm" />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid, #DCE8DF)" />
+              <XAxis dataKey="year" stroke="var(--chart-axis, #607568)" fontSize={11} tickLine={false} />
+              <YAxis stroke="var(--chart-axis, #607568)" fontSize={11} tickLine={false} domain={['dataMin - 100', 'dataMax + 100']} unit=" mm" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'var(--chart-tooltip-bg, #FFFFFF)',
+                  borderColor: 'var(--chart-tooltip-border, #DCE8DF)',
+                  borderRadius: '10px',
+                  color: 'var(--chart-tooltip-text, #183C2C)',
+                  fontSize: '12px',
+                  boxShadow: '0 4px 16px rgba(24, 60, 44, 0.08)'
+                }}
                 formatter={(val) => [`${val} mm`, 'Rainfall']}
               />
               <Line type="monotone" dataKey="rainfall" stroke="#2563eb" strokeWidth={2.5} dot={{ fill: '#2563eb', r: 4 }} />
@@ -544,11 +558,18 @@ export default function HistoryPage() {
         <div className="h-60 w-full pt-1">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={filteredData} margin={{ top: 10, right: 20, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-              <XAxis dataKey="year" stroke="#64748b" fontSize={11} tickLine={false} />
-              <YAxis stroke="#64748b" fontSize={11} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} unit=" °C" />
-              <Tooltip 
-                contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', color: '#fff', fontSize: '12px' }}
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--chart-grid, #DCE8DF)" />
+              <XAxis dataKey="year" stroke="var(--chart-axis, #607568)" fontSize={11} tickLine={false} />
+              <YAxis stroke="var(--chart-axis, #607568)" fontSize={11} tickLine={false} domain={['dataMin - 1', 'dataMax + 1']} unit=" °C" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'var(--chart-tooltip-bg, #FFFFFF)',
+                  borderColor: 'var(--chart-tooltip-border, #DCE8DF)',
+                  borderRadius: '10px',
+                  color: 'var(--chart-tooltip-text, #183C2C)',
+                  fontSize: '12px',
+                  boxShadow: '0 4px 16px rgba(24, 60, 44, 0.08)'
+                }}
                 formatter={(val) => [`${val} °C`, 'Kharif Max Temp']}
               />
               <Line type="monotone" dataKey="tmax" stroke="#b45309" strokeWidth={2.5} dot={{ fill: '#b45309', r: 4 }} />

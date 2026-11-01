@@ -86,7 +86,7 @@ test.describe('AgriPredict-AI End-to-End Application Verification', () => {
 
     // Step 1: Select Akola and 2024
     await expect(page.locator('text=STEP 01 / 05')).toBeVisible();
-    
+
     // Select Akola
     const akolaBtn = page.locator('button:has-text("Akola District")');
     if (await akolaBtn.isVisible()) {
@@ -118,12 +118,17 @@ test.describe('AgriPredict-AI End-to-End Application Verification', () => {
     await expect(page.locator('text=STEP 04 / 05').or(page.locator('text=Model & Review'))).toBeVisible();
   });
 
-  test('7. Model selection dynamically updates review card metadata', async ({ page }) => {
+  test('7. Fixed production model card displays Six-District Thermal Ridge metadata', async ({ page }) => {
     await page.goto('/cotton');
 
-    // Change model selector to DAR + Deficit + Heat Thresh
-    const modelSelect = page.locator('select').nth(2); // Model Architecture selector
-    await modelSelect.selectOption('candidate_six_district_dar_deficit_heat_thresh');
+    // Verify fixed production model card is displayed in Step 1
+    await expect(page.locator('text=Six-District Thermal Ridge').first()).toBeVisible();
+    await expect(page.locator('text=Production Model').first()).toBeVisible();
+    await expect(page.locator('text=104.75 kg/ha').first()).toBeVisible();
+
+    // Verify model architecture dropdown is removed (only Target Year select in form)
+    const mainSelects = page.locator('main select');
+    await expect(mainSelects).toHaveCount(1);
 
     // Click Load Verified Data
     await page.locator('button:has-text("Load Verified Data")').click();
@@ -136,9 +141,10 @@ test.describe('AgriPredict-AI End-to-End Application Verification', () => {
     await page.getByRole('button', { name: 'Review', exact: true }).click();
     await expect(page.locator('text=STEP 04 / 05')).toBeVisible();
 
-    // Verify Review Card shows the selected candidate's metrics
-    await expect(page.locator('text=Ridge_Delta_Rolling_SixDistricts_Decoupled_Deficit_HeatThresh').or(page.locator('text=DAR + Deficit + Heat Thresh'))).toBeVisible();
-    await expect(page.locator('text=102.60 kg/ha').first()).toBeVisible();
+    // Verify Review Card shows the fixed production model's metrics
+    await expect(page.locator('text=Six-District Thermal Ridge').first()).toBeVisible();
+    await expect(page.locator('text=104.75 kg/ha').first()).toBeVisible();
+    await expect(page.locator('text=138.10 kg/ha · 32.3%')).toBeVisible();
   });
 
   test('8. Cotton prediction displays actual model version and SHAP explanation', async ({ page }) => {

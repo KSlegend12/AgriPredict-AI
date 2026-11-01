@@ -30,7 +30,7 @@ export default function WeatherPage({ selectedDistrict, setSelectedDistrict }) {
 
   return (
     <div className="space-y-8 py-4 max-w-7xl mx-auto">
-      
+
       {/* Top Header & District Selector */}
       <div className="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-200 pb-4 gap-4">
         <div>

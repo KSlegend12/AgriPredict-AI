@@ -3,7 +3,7 @@ import { Sprout } from 'lucide-react';
 
 /**
  * Robust AgricultureImage Component
- * 
+ *
  * - Tries primary src (e.g. /images/cotton-field.jpg)
  * - Tries fallbackSrc (e.g. /images/cotton-plant.jpg)
  * - If both fail, renders a clean, styled agricultural SVG placeholder
@@ -40,7 +40,7 @@ export default function AgricultureImage({
 
   if (isError) {
     return (
-      <div 
+      <div
         className={`relative flex flex-col items-center justify-center bg-gradient-to-br from-emerald-800 via-teal-900 to-slate-900 text-white p-6 text-center select-none overflow-hidden ${className}`}
         style={style}
       >

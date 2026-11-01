@@ -321,7 +321,7 @@ export default function FutureCottonForecastPage({
           HEADER
       ===================================================== */}
 
-      <section className="relative overflow-hidden rounded-2xl bg-slate-900 px-6 py-7 text-white shadow-sm sm:px-8 dark:border dark:border-slate-800">
+      <section className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#087A50] via-[#096644] to-[#05442d] dark:from-slate-900 dark:to-slate-950 px-6 py-7 text-white shadow-sm sm:px-8 dark:border dark:border-slate-800">
 
         <div className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl" />
 
@@ -472,7 +472,7 @@ export default function FutureCottonForecastPage({
             disabled={
               loading || loading2026
             }
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-bold text-white transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-emerald-600 dark:hover:bg-emerald-500 lg:w-auto"
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#087A50] hover:bg-[#066341] px-5 py-3 text-sm font-bold text-white transition disabled:cursor-not-allowed disabled:opacity-60 dark:bg-emerald-600 dark:hover:bg-emerald-500 lg:w-auto"
           >
 
             {loading || loading2026 ? (

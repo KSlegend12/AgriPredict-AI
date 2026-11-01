@@ -1,13 +1,54 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *, .dark-theme, .dark-theme *));
+
+:root {
+  --bg-main: #F4F8F5;
+  --bg-secondary: #EAF2EC;
+  --bg-card: #FFFFFF;
+  --primary-green: #087A50;
+  --secondary-green: #15966A;
+  --text-main: #183C2C;
+  --text-secondary: #607568;
+  --border-main: #DCE8DF;
+  --border-subtle: #E8F0EA;
+  --bg-hover: #E5F2E9;
+  --indicator-pos: #087A50;
+  --indicator-neg: #C53030;
+  --indicator-warn: #B7791F;
+
+  --chart-grid: #DCE8DF;
+  --chart-axis: #607568;
+  --chart-tooltip-bg: #FFFFFF;
+  --chart-tooltip-border: #DCE8DF;
+  --chart-tooltip-text: #183C2C;
+  --forecast-tooltip-bg: #FFFFFF;
+  --forecast-tooltip-border: #DCE8DF;
+  --forecast-tooltip-text: #183C2C;
+}
+
+.dark-theme {
+  --bg-main: #07130f;
+  --bg-secondary: #10271e;
+  --bg-card: #0d2119;
+  --chart-grid: rgba(255, 255, 255, 0.08);
+  --chart-axis: #94a3b8;
+  --chart-tooltip-bg: #0f172a;
+  --chart-tooltip-border: #1e293b;
+  --chart-tooltip-text: #f8fafc;
+  --forecast-tooltip-bg: #0f172a;
+  --forecast-tooltip-border: #334155;
+  --forecast-tooltip-text: #f8fafc;
+}
+
 @layer base {
   html { scroll-behavior: smooth; }
   body {
     margin: 0;
     font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: #f4f8f3;
-    color: #0f172a;
+    background: var(--bg-main);
+    color: var(--text-main);
     -webkit-font-smoothing: antialiased;
   }
   button, select { font-family: inherit; }
@@ -15,22 +56,126 @@
 
 .font-mono { font-family: 'JetBrains Mono', monospace; }
 
+.app-shell {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
 .agri-card {
-  background: #fff;
-  border: 1px solid #e2e8f0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-main);
   border-radius: 20px;
-  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.045);
+  box-shadow: 0 4px 20px rgba(24, 60, 44, 0.045);
 }
 
 .agri-card-hover { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-.agri-card-hover:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(15,23,42,.08); border-color: #cbd5e1; }
+.agri-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(24, 60, 44, 0.08);
+  border-color: #c4d7c8;
+}
+
+/* Glass panel fallback for light and dark */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-main);
+}
+.dark-theme .glass-panel {
+  background: rgba(13, 33, 25, 0.85);
+  border-color: #203c31;
+}
 
 ::-webkit-scrollbar { width: 7px; height: 7px; }
-::-webkit-scrollbar-track { background: #f1f5f9; }
-::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 999px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: #b8ccbe; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #96af9e; }
 
-::selection { background: #059669; color: white; }
+::selection { background: #087A50; color: white; }
+
+/* Light mode overrides for Tailwind slate / gray utilities to match #183C2C and #F4F8F5 */
+body:not(.dark-theme) .text-slate-950,
+body:not(.dark-theme) .text-slate-900,
+body:not(.dark-theme) .text-slate-800 {
+  color: #183C2C;
+}
+
+body:not(.dark-theme) .text-slate-700 {
+  color: #234938;
+}
+
+body:not(.dark-theme) .text-slate-600,
+body:not(.dark-theme) .text-slate-500 {
+  color: #607568;
+}
+
+body:not(.dark-theme) .text-slate-400 {
+  color: #789082;
+}
+
+body:not(.dark-theme) .bg-slate-50 {
+  background-color: #EAF2EC;
+}
+
+body:not(.dark-theme) .bg-slate-100 {
+  background-color: #e0ece3;
+}
+
+body:not(.dark-theme) .border-slate-200,
+body:not(.dark-theme) .border-slate-100 {
+  border-color: #DCE8DF;
+}
+
+body:not(.dark-theme) .border-slate-300 {
+  border-color: #c8dacd;
+}
+
+body:not(.dark-theme) .hover\:bg-slate-50:hover {
+  background-color: #E5F2E9;
+}
+
+body:not(.dark-theme) .hover\:bg-slate-100:hover {
+  background-color: #dbe9df;
+}
+
+/* Status colors in light mode */
+body:not(.dark-theme) .bg-emerald-50 {
+  background-color: rgba(8, 122, 80, 0.08);
+}
+body:not(.dark-theme) .text-emerald-700,
+body:not(.dark-theme) .text-emerald-600 {
+  color: #087A50;
+}
+body:not(.dark-theme) .border-emerald-100,
+body:not(.dark-theme) .border-emerald-200 {
+  border-color: rgba(8, 122, 80, 0.22);
+}
+
+body:not(.dark-theme) .bg-amber-50 {
+  background-color: rgba(183, 121, 31, 0.08);
+}
+body:not(.dark-theme) .text-amber-800,
+body:not(.dark-theme) .text-amber-700 {
+  color: #B7791F;
+}
+body:not(.dark-theme) .border-amber-200,
+body:not(.dark-theme) .border-amber-100 {
+  border-color: rgba(183, 121, 31, 0.25);
+}
+
+body:not(.dark-theme) .bg-rose-50,
+body:not(.dark-theme) .bg-red-50 {
+  background-color: rgba(197, 48, 48, 0.08);
+}
+body:not(.dark-theme) .text-rose-700,
+body:not(.dark-theme) .text-red-700,
+body:not(.dark-theme) .text-rose-600 {
+  color: #C53030;
+}
+body:not(.dark-theme) .border-rose-200,
+body:not(.dark-theme) .border-red-200 {
+  border-color: rgba(197, 48, 48, 0.22);
+}
 
 /* =========================================================
    AgriPredict-AI theme system
@@ -148,15 +293,4 @@
 
 @media (max-width: 767px) {
   .dark-theme .app-header { background: rgba(8,20,15,.97) !important; }
-}
-:root {
-  --forecast-tooltip-bg: #ffffff;
-  --forecast-tooltip-border: #e2e8f0;
-  --forecast-tooltip-text: #0f172a;
-}
-
-.dark {
-  --forecast-tooltip-bg: #0f172a;
-  --forecast-tooltip-border: #334155;
-  --forecast-tooltip-text: #f8fafc;
 }
